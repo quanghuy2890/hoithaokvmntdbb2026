@@ -194,3 +194,9 @@ main { width: 100%; max-width: 1800px; margin: 0 auto; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
 }
+
+
+/* Homepage gallery category */
+.info-card.gallery .card-icon { background: linear-gradient(145deg, #fff4d8, #ffe2ad); color: #9a5b00; }
+.info-card.gallery { border-color: #ead7a8; }
+.info-card.gallery:hover { border-color: #c98a24; }
