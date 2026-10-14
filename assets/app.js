@@ -29,11 +29,4 @@
     window.setInterval(updateCountdown, 1000);
   }
 
-  const navLinks = document.querySelectorAll(".mobile-bottom-nav a");
-  navLinks.forEach(link => {
-    link.addEventListener("click", () => {
-      navLinks.forEach(item => item.classList.remove("nav-active"));
-      link.classList.add("nav-active");
-    });
-  });
 })();
