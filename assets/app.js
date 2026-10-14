@@ -1,32 +1,104 @@
 (() => {
   "use strict";
   const countdown = document.querySelector(".countdown");
-  if (countdown) {
-    const target = new Date(countdown.dataset.target).getTime();
-    const fields = {
-      days: document.getElementById("days"),
-      hours: document.getElementById("hours"),
-      minutes: document.getElementById("minutes"),
-      seconds: document.getElementById("seconds")
-    };
-    const updateCountdown = () => {
-      let remaining = Math.max(0, Math.floor((target - Date.now()) / 1000));
-      const values = {
-        days: Math.floor(remaining / 86400),
-        hours: Math.floor((remaining % 86400) / 3600),
-        minutes: Math.floor((remaining % 3600) / 60),
-        seconds: remaining % 60
-      };
-      Object.keys(fields).forEach(key => {
-        if (fields[key]) fields[key].textContent = String(values[key]).padStart(2, "0");
-      });
-      if (remaining <= 0) {
-        const heading = document.getElementById("countdown-heading");
-        if (heading) heading.textContent = "Hội thao đã bắt đầu";
-      }
-    };
-    updateCountdown();
-    window.setInterval(updateCountdown, 1000);
-  }
+  if (!countdown) return;
+  const target = new Date(countdown.dataset.target).getTime();
+  const fields = {
+    days: document.getElementById("days"),
+    hours: document.getElementById("hours"),
+    minutes: document.getElementById("minutes"),
+    seconds: document.getElementById("seconds")
+  };
+  const opening = document.querySelector(".opening");
+  const heading = document.getElementById("countdown-heading");
+  const panel = document.getElementById("live-match-panel");
+  let liveRendered = false;
 
+  function parseDate(dateText) {
+    const p = dateText.split("/");
+    return new Date(Number(p[2]), Number(p[1]) - 1, Number(p[0]), 0, 0, 0, 0);
+  }
+  function parseTime(timeText) {
+    const m = String(timeText).match(/(\d{1,2})h(\d{2})/i);
+    if (m) return {h:Number(m[1]),m:Number(m[2])};
+    const session = String(timeText).toLocaleLowerCase("vi");
+    if (session.includes("sáng")) return {h:7,m:30};
+    if (session.includes("chiều")) return {h:14,m:0};
+    if (session.includes("tối")) return {h:19,m:30};
+    return {h:7,m:30};
+  }
+  function dateTime(dateText,timeText) {
+    const d = parseDate(dateText), t = parseTime(timeText);
+    d.setHours(t.h,t.m,0,0);
+    return d;
+  }
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+  }
+  function collectMatches() {
+    const data = window.HOI_THAO_MATCHES;
+    if (!data) return [];
+    const list = [];
+    (data.football || []).forEach(r => list.push({
+      sport:"⚽ Bóng đá mini nam",date:r[0],time:r[1],id:r[2],group:"Bảng/vòng "+r[3],
+      teams:r[4],venue:"Sân vận động Đông Kinh · Sân "+r[5],start:dateTime(r[0],r[1]),duration:90
+    }));
+    (data.volley || []).forEach(r => list.push({
+      sport:"🏐 Bóng chuyền hơi nữ",date:r[0],time:r[1],id:r[2],group:"Bảng/vòng "+r[3],
+      teams:r[4],venue:r[5],start:dateTime(r[0],r[1]),duration:50
+    }));
+    (data.pickle || []).forEach(r => list.push({
+      sport:"🏓 Pickleball",date:r[0],time:r[1],id:r[3],group:r[5]===" "?"":("Bảng/vòng "+r[5]),
+      teams:r[6],venue:"Cụm sân Victory · "+r[2],start:dateTime(r[0],r[1]),duration:35
+    }));
+    return list;
+  }
+  function renderLiveMatches(now) {
+    if (!panel || !window.HOI_THAO_MATCHES) return;
+    const matches = collectMatches().filter(m => m.start.getTime() >= target - 24*60*60*1000);
+    const ongoing = matches.filter(m => m.start <= now && now < new Date(m.start.getTime()+m.duration*60000));
+    let selected = ongoing.slice(0,3);
+    let label = "ĐANG DIỄN RA";
+    if (!selected.length) {
+      const upcoming = matches.filter(m => m.start > now).sort((a,b)=>a.start-b.start);
+      if (upcoming.length) {
+        const first = upcoming[0].start;
+        selected = upcoming.filter(m => m.start.getTime() === first.getTime()).slice(0,4);
+        label = first.getTime()-now.getTime() <= 90*60000 ? "SẮP ĐẾN GIỜ" : "LỊCH TIẾP THEO";
+      } else {
+        const today = matches.filter(m => m.start.toDateString()===now.toDateString()).sort((a,b)=>b.start-a.start);
+        selected = today.slice(0,3);
+        label = "LỊCH THI ĐẤU HÔM NAY";
+      }
+    }
+    const time = d => d.toLocaleTimeString("vi-VN",{hour:"2-digit",minute:"2-digit",hour12:false});
+    panel.innerHTML = '<div class="live-head"><span class="live-kicker">● CẬP NHẬT THEO LỊCH THI ĐẤU</span><span class="live-status">'+label+'</span></div>' +
+      (selected.length ? '<div class="live-list">'+selected.map(m =>
+        '<article class="live-card"><div class="live-card-top"><span class="live-sport">'+esc(m.sport)+'</span><span class="live-time">'+esc(m.date)+' · '+esc(time(m.start))+'</span></div><strong class="live-teams">'+esc(m.teams)+'</strong><div class="live-detail">'+esc(m.group)+' · '+esc(m.venue)+'</div></article>'
+      ).join("")+'</div>' : '<p class="live-empty">Chưa có trận nào trong dữ liệu lịch sắp tới. Vui lòng xem lịch thi đấu chi tiết.</p>') +
+      '<a class="live-more" href="dia-diem-lich-thi-dau.html">Xem toàn bộ lịch và kết quả →</a>' +
+      '<p class="live-refresh">Tự cập nhật theo giờ trên thiết bị. Giờ các buổi sáng/chiều/tối là giờ bắt đầu dự kiến của buổi.</p>';
+    panel.hidden = false;
+    countdown.hidden = true;
+    if (opening) opening.hidden = true;
+    if (heading) heading.textContent = "Lịch thi đấu đang diễn ra";
+    liveRendered = true;
+  }
+  const update = () => {
+    const now = new Date();
+    const remaining = Math.max(0, Math.floor((target-now.getTime())/1000));
+    if (remaining <= 0) {
+      if (!liveRendered) renderLiveMatches(now);
+      return;
+    }
+    const values = {
+      days:Math.floor(remaining/86400),
+      hours:Math.floor((remaining%86400)/3600),
+      minutes:Math.floor((remaining%3600)/60),
+      seconds:remaining%60
+    };
+    Object.keys(fields).forEach(key => { if(fields[key]) fields[key].textContent=String(values[key]).padStart(2,"0"); });
+  };
+  update();
+  window.setInterval(update,1000);
 })();
