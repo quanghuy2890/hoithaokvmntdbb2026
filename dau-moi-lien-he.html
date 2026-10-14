@@ -13,75 +13,168 @@ main{width:min(1100px,100%);margin:30px auto 46px;padding:0 18px}.lead{margin:0 
 @media(max-width:850px){.contacts{grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}}
 @media(max-width:560px){.branch-section{margin-top:28px}.branch-tools input{flex-basis:100%}th,td{padding:10px}.hero{padding:18px 15px 25px}main{padding:0 12px;margin-top:20px}.contacts{grid-template-columns:1fr}.card{padding:19px;border-radius:16px}.lead{font-size:21px}.name{font-size:23px}.role{font-size:16px}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* Danh sách chi nhánh dạng thẻ: tương phản rõ, không dùng bảng rộng trên điện thoại */
+.branch-section{margin-top:34px}
+.section-title{margin:0 0 7px;color:#075c3b;font-size:clamp(24px,3vw,32px)}
+.section-desc{margin:0 0 16px;color:#526574;font-size:17px}
+.branch-tools{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:0 0 16px}
+.branch-tools input{flex:1 1 280px;min-width:0;min-height:46px;padding:11px 14px;border:1px solid #cbd9df;border-radius:11px;background:#fff;color:#183247;font:17px "Times New Roman",serif}
+.branch-count{color:#526574;font-size:15px;white-space:nowrap}
+.branch-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.branch-card{min-width:0;border:1px solid #dce6eb;border-radius:16px;background:#fff;overflow:hidden;box-shadow:0 5px 16px #1832470a}
+.branch-card-head{display:flex;align-items:center;gap:10px;padding:12px 15px;background:#e7f3ec;border-bottom:1px solid #dce6eb}
+.branch-no{flex:0 0 32px;display:inline-grid;place-items:center;width:32px;height:32px;border-radius:9px;background:#087849;color:#fff;font-weight:bold}
+.branch-card-head h3{margin:0;color:#075c3b;font-size:20px;line-height:1.25}
+.contact-pair{display:grid;grid-template-columns:1fr 1fr}
+.person-box{display:flex;flex-direction:column;align-items:flex-start;gap:7px;min-width:0;padding:14px 15px}
+.person-box+.person-box{border-left:1px solid #e2eaf0;background:#fbfcfd}
+.person-label{color:#617381;font-size:13px;font-weight:bold;line-height:1.25}
+.person-box strong{color:#183247;font-size:16px;line-height:1.3;overflow-wrap:anywhere}
+.person-phone{display:inline-block;margin-top:2px;color:#087849;font-size:15px;font-weight:bold;text-decoration:none;overflow-wrap:anywhere}
+.person-phone:hover{text-decoration:underline}
+.no-results{padding:22px;text-align:center;color:#526574;background:#fff;border:1px solid #dce6eb;border-radius:12px}
+@media(max-width:760px){.branch-grid{grid-template-columns:1fr}.branch-section{margin-top:28px}.branch-card-head h3{font-size:19px}.person-box{padding:13px 12px}.person-box strong{font-size:15px}.person-phone{font-size:14px}.branch-tools input{flex-basis:100%}}
+
 </style>
 </head>
 <body>
 <header class="hero"><div class="wrap">
 <a class="back" href<section class="branch-section" aria-labelledby="branch-title">
 <h2 class="section-title" id="branch-title">Đầu mối liên hệ tại các chi nhánh</h2>
-<p class="section-desc">Mỗi dòng ghép đúng STT giữa cán bộ phụ trách đoàn và đầu mối của chi nhánh tương ứng. Có thể tìm theo tên, đơn vị hoặc số điện thoại; nhấn số điện thoại để gọi trực tiếp.</p>
-<div class="branch-tools"><input type="search" id="branchSearch" placeholder="Tìm theo tên cán bộ, tên chi nhánh hoặc số điện thoại..." aria-label="Tìm đầu mối chi nhánh"><span class="branch-count" id="branchCount">19 cặp đầu mối</span></div>
-<div class="table-shell"><table><thead><tr><th>STT</th><th>Cán bộ phụ trách đoàn</th><th>Tên đơn vị</th><th>Đầu mối chi nhánh</th><th>Điện thoại đầu mối</th></tr></thead><tbody id="branchRows">
-<tr><td><span class="branch-no">1</span></td><td><strong>Hoàng Văn Cảm</strong><br><a class="branch-phone" href="tel:0913396202">0913 396 202</a></td><td>Sơn La</td><td>Phạm Thị Thanh Hương</td><td><a class="branch-phone" href="tel:0946227744">0946 227 744</a></td></tr>
-<tr><td><span class="branch-no">2</span></td><td><strong>Lộc Thị Thanh Hương</strong><br><a class="branch-phone" href="tel:0919698818">0919 698 818</a></td><td>Sơn La II</td><td>Phạm Phúc Khang</td><td><a class="branch-phone" href="tel:0827088899">0827 088 899</a></td></tr>
-<tr><td><span class="branch-no">3</span></td><td><strong>Trịnh Xuân Vinh</strong><br><a class="branch-phone" href="tel:0915433818">0915 433 818</a></td><td>Tuyên Quang</td><td>Phan Thị Bình Minh</td><td><a class="branch-phone" href="tel:0982835939">0982 835 939</a></td></tr>
-<tr><td><span class="branch-no">4</span></td><td><strong>Lê Phương Dung</strong><br><a class="branch-phone" href="tel:0915666051">0915 666 051</a></td><td>Lào Cai II</td><td>Nguyễn Thị Ngọc Mai</td><td><a class="branch-phone" href="tel:0827449331">0827 449 331</a></td></tr>
-<tr><td><span class="branch-no">5</span></td><td><strong>Đinh Thị Nghĩa</strong><br><a class="branch-phone" href="tel:0984816678">0984 816 678</a></td><td>Vĩnh Phúc</td><td>Đỗ Thị Hương Giang</td><td><a class="branch-phone" href="tel:0964978868">0964 978 868</a></td></tr>
-<tr><td><span class="branch-no">6</span></td><td><strong>Hà Thị Hợp</strong><br><a class="branch-phone" href="tel:0912183742">0912 183 742</a></td><td>Vĩnh Phúc II</td><td>Trần Ánh Nguyệt</td><td><a class="branch-phone" href="tel:0915446001">0915 446 001</a></td></tr>
-<tr><td><span class="branch-no">7</span></td><td><strong>Hoàng Bích Hạnh</strong><br><a class="branch-phone" href="tel:0917292168">0917 292 168</a></td><td>Hòa Bình</td><td>Giản Thị Minh Tiến</td><td><a class="branch-phone" href="tel:0976611540">0976 611 540</a></td></tr>
-<tr><td><span class="branch-no">8</span></td><td><strong>Phan Minh Hồng</strong><br><a class="branch-phone" href="tel:0869949687">0869 949 687</a></td><td>Hà Giang</td><td>Trần Anh Tuấn</td><td><a class="branch-phone" href="tel:0834133666">0834 133 666</a></td></tr>
-<tr><td><span class="branch-no">9</span></td><td><strong>Hoàng Văn Nghĩa</strong><br><a class="branch-phone" href="tel:0912245226">0912 245 226</a></td><td>Lào Cai</td><td>Lưu Thị Hồng Nhung</td><td><a class="branch-phone" href="tel:0918819928">0918 819 928</a></td></tr>
-<tr><td><span class="branch-no">10</span></td><td><strong>Hoàng Thị Thanh Loan</strong><br><a class="branch-phone" href="tel:0986899668">0986 899 668</a></td><td>Lai Châu</td><td>Nguyễn Xuân Thịnh</td><td><a class="branch-phone" href="tel:0988919111">0988 919 111</a></td></tr>
-<tr><td><span class="branch-no">11</span></td><td><strong>Trần Đại Dương</strong><br><a class="branch-phone" href="tel:0888198928">0888 198 928</a></td><td>Yên Bái</td><td>Phạm Thu Hương</td><td><a class="branch-phone" href="tel:0912474017">0912 474 017</a></td></tr>
-<tr><td><span class="branch-no">12</span></td><td><strong>Đào Việt Cường</strong><br><a class="branch-phone" href="tel:0912072278">0912 072 278</a></td><td>Bắc Kạn</td><td>Cao Thị Hải Yến</td><td><a class="branch-phone" href="tel:0832898555">0832 898 555</a></td></tr>
-<tr><td><span class="branch-no">13</span></td><td><strong>Nguyễn Đức Duy</strong><br><a class="branch-phone" href="tel:0912167666">0912 167 666</a></td><td>Bắc Yên Bái</td><td>Trần Lâm Hùng</td><td><a class="branch-phone" href="tel:0398151972">0398 151 972</a></td></tr>
-<tr><td><span class="branch-no">14</span></td><td><strong>Đào Anh Tuấn</strong><br><a class="branch-phone" href="tel:0912756828">0912 756 828</a></td><td>Cao Bằng</td><td>Trịnh Quốc Hưng</td><td><a class="branch-phone" href="tel:0912661055">0912 661 055</a></td></tr>
-<tr><td><span class="branch-no">15</span></td><td><strong>Dương Anh Tuấn</strong><br><a class="branch-phone" href="tel:0949281628">0949 281 628</a></td><td>Điện Biên</td><td>Nguyễn Thị Tuyết</td><td><a class="branch-phone" href="tel:0942838688">0942 838 688</a></td></tr>
-<tr><td><span class="branch-no">16</span></td><td><strong>Hoàng Trung Dũng</strong><br><a class="branch-phone" href="tel:0912245994">0912 245 994</a></td><td>Phú Thọ</td><td>Mai Thị Bích Hảo</td><td><a class="branch-phone" href="tel:0978603537">0978 603 537</a></td></tr>
-<tr><td><span class="branch-no">17</span></td><td><strong>Lương Thị Kiều Oanh</strong><br><a class="branch-phone" href="tel:0949280655">0949 280 655</a></td><td>Phú Thọ II</td><td>Trần Thị Ngọc Mai</td><td><a class="branch-phone" href="tel:0943428428">0943 428 428</a></td></tr>
-<tr><td><span class="branch-no">18</span></td><td><strong>Đinh Mạnh Tùng Lâm</strong><br><a class="branch-phone" href="tel:0852188666">0852 188 666</a></td><td>Nam Thái Nguyên</td><td>Tạ Thị Hải Vân</td><td><a class="branch-phone" href="tel:0915247167">0915 247 167</a></td></tr>
-<tr><td><span class="branch-no">19</span></td><td><strong>Dư Chấn Hưng</strong><br><a class="branch-phone" href="tel:0912265368">0912 265 368</a></td><td>Thái Nguyên</td><td>Trần Thị Hồng Tuấn</td><td><a class="branch-phone" href="tel:0982134115">0982 134 115</a></td></tr>
-</tbody></table><div class="no-results" id="branchNoResults" hidden>Không tìm thấy đầu mối phù hợp.</div></div>
-</section>
-
-<p class="lead">Đầu mối chung của Ban Tổ chức</p>
-<section class="contacts" aria-label="Danh sách đầu mối liên hệ">
-<article class="card" style="--tone:#087849">
-<div class="icon" aria-hidden="true">🏅</div>
-<p class="tag">Công tác thi đấu</p>
-<h2 class="name">Đ/c Hoàng Thị Kim Tuyên</h2>
-<p class="role">Phụ trách công tác thi đấu</p>
-<a class="phone" href="tel:0919898616">☎ 0919 898 616</a>
-</article>
-<article class="card" style="--tone:#e87922">
-<div class="icon" aria-hidden="true">🤝</div>
-<p class="tag">Công tác hậu cần</p>
-<h2 class="name">Đ/c Vi Thị Thu Ngần</h2>
-<p class="role">Phụ trách công tác hậu cần</p>
-<a class="phone" href="tel:0919713168">☎ 0919 713 168</a>
-</article>
-<article class="card" style="--tone:#176bc1">
-<div class="icon" aria-hidden="true">📣</div>
-<p class="tag">Công tác truyền thông</p>
-<h2 class="name">Đ/c Nguyễn Thị Ngọc Mai</h2>
-<p class="role">Phụ trách công tác truyền thông</p>
-<a class="phone" href="tel:0915116669">☎ 0915 116 669</a>
-</article>
-</section>
-n Thị Hồng Tuấn</td><td><a class="branch-phone" href="tel:0982134115">0982 134 115</a></td></tr>
-</tbody></table><div class="no-results" id="branchNoResults" hidden>Không tìm thấy đầu mối phù hợp.</div></div>
+<p class="section-desc">Mỗi thẻ thể hiện một chi nhánh, ghép đúng cán bộ phụ trách đoàn và đầu mối liên hệ tại đơn vị.</p>
+<div class="branch-tools"><input type="search" id="branchSearch" placeholder="Tìm tên chi nhánh, cán bộ hoặc số điện thoại..." aria-label="Tìm đầu mối chi nhánh"><span class="branch-count" id="branchCount">19 chi nhánh</span></div>
+<div class="branch-grid" id="branchGrid"><article class="branch-card" data-search="sơn la hoàng văn cảm 0913396202 phạm thị thanh hương 0946227744">
+<div class="branch-card-head"><span class="branch-no">1</span><h3>Sơn La</h3></div>
+<div class="contact-pair">
+<div class="person-box"><span class="person-label">Cán bộ phụ trách đoàn</span><strong>Hoàng Văn Cảm</strong><a class="person-phone" href="tel:0913396202">☎ 0913 396 202</a></div>
+<div class="person-box liaison"><span class="person-label">Đầu mối chi nhánh</span><strong>Phạm Thị Thanh Hương</strong><a class="person-phone" href="tel:0946227744">☎ 0946 227 744</a></div>
+</div></article>
+<article class="branch-card" data-search="sơn la ii lộc thị thanh hương 0919698818 phạm phúc khang 0827088899">
+<div class="branch-card-head"><span class="branch-no">2</span><h3>Sơn La II</h3></div>
+<div class="contact-pair">
+<div class="person-box"><span class="person-label">Cán bộ phụ trách đoàn</span><strong>Lộc Thị Thanh Hương</strong><a class="person-phone" href="tel:0919698818">☎ 0919 698 818</a></div>
+<div class="person-box liaison"><span class="person-label">Đầu mối chi nhánh</span><strong>Phạm Phúc Khang</strong><a class="person-phone" href="tel:0827088899">☎ 0827 088 899</a></div>
+</div></article>
+<article class="branch-card" data-search="tuyên quang trịnh xuân vinh 0915433818 phan thị bình minh 0982835939">
+<div class="branch-card-head"><span class="branch-no">3</span><h3>Tuyên Quang</h3></div>
+<div class="contact-pair">
+<div class="person-box"><span class="person-label">Cán bộ phụ trách đoàn</span><strong>Trịnh Xuân Vinh</strong><a class="person-phone" href="tel:0915433818">☎ 0915 433 818</a></div>
+<div class="person-box liaison"><span class="person-label">Đầu mối chi nhánh</span><strong>Phan Thị Bình Minh</strong><a class="person-phone" href="tel:0982835939">☎ 0982 835 939</a></div>
+</div></article>
+<article class="branch-card" data-search="lào cai ii lê phương dung 0915666051 nguyễn thị ngọc mai 0827449331">
+<div class="branch-card-head"><span class="branch-no">4</span><h3>Lào Cai II</h3></div>
+<div class="contact-pair">
+<div class="person-box"><span class="person-label">Cán bộ phụ trách đoàn</span><strong>Lê Phương Dung</strong><a class="person-phone" href="tel:0915666051">☎ 0915 666 051</a></div>
+<div class="person-box liaison"><span class="person-label">Đầu mối chi nhánh</span><strong>Nguyễn Thị Ngọc Mai</strong><a class="person-phone" href="tel:0827449331">☎ 0827 449 331</a></div>
+</div></article>
+<article class="branch-card" data-search="vĩnh phúc đinh thị nghĩa 0984816678 đỗ thị hương giang 0964978868">
+<div class="branch-card-head"><span class="branch-no">5</span><h3>Vĩnh Phúc</h3></div>
+<div class="contact-pair">
+<div class="person-box"><span class="person-label">Cán bộ phụ trách đoàn</span><strong>Đinh Thị Nghĩa</strong><a class="person-phone" href="tel:0984816678">☎ 0984 816 678</a></div>
+<div class="person-box liaison"><span class="person-label">Đầu mối chi nhánh</span><strong>Đỗ Thị Hương Giang</strong><a class="person-phone" href="tel:0964978868">☎ 0964 978 868</a></div>
+</div></article>
+<article class="branch-card" data-search="vĩnh phúc ii hà thị hợp 0912183742 trần ánh nguyệt 0915446001">
+<div class="branch-card-head"><span class="branch-no">6</span><h3>Vĩnh Phúc II</h3></div>
+<div class="contact-pair">
+<div class="person-box"><span class="person-label">Cán bộ phụ trách đoàn</span><strong>Hà Thị Hợp</strong><a class="person-phone" href="tel:0912183742">☎ 0912 183 742</a></div>
+<div class="person-box liaison"><span class="person-label">Đầu mối chi nhánh</span><strong>Trần Ánh Nguyệt</strong><a class="person-phone" href="tel:0915446001">☎ 0915 446 001</a></div>
+</div></article>
+<article class="branch-card" data-search="hòa bình hoàng bích hạnh 0917292168 giản thị minh tiến 0976611540">
+<div class="branch-card-head"><span class="branch-no">7</span><h3>Hòa Bình</h3></div>
+<div class="contact-pair">
+<div class="person-box"><span class="person-label">Cán bộ phụ trách đoàn</span><strong>Hoàng Bích Hạnh</strong><a class="person-phone" href="tel:0917292168">☎ 0917 292 168</a></div>
+<div class="person-box liaison"><span class="person-label">Đầu mối chi nhánh</span><strong>Giản Thị Minh Tiến</strong><a class="person-phone" href="tel:0976611540">☎ 0976 611 540</a></div>
+</div></article>
+<article class="branch-card" data-search="hà giang phan minh hồng 0869949687 trần anh tuấn 0834133666">
+<div class="branch-card-head"><span class="branch-no">8</span><h3>Hà Giang</h3></div>
+<div class="contact-pair">
+<div class="person-box"><span class="person-label">Cán bộ phụ trách đoàn</span><strong>Phan Minh Hồng</strong><a class="person-phone" href="tel:0869949687">☎ 0869 949 687</a></div>
+<div class="person-box liaison"><span class="person-label">Đầu mối chi nhánh</span><strong>Trần Anh Tuấn</strong><a class="person-phone" href="tel:0834133666">☎ 0834 133 666</a></div>
+</div></article>
+<article class="branch-card" data-search="lào cai hoàng văn nghĩa 0912245226 lưu thị hồng nhung 0918819928">
+<div class="branch-card-head"><span class="branch-no">9</span><h3>Lào Cai</h3></div>
+<div class="contact-pair">
+<div class="person-box"><span class="person-label">Cán bộ phụ trách đoàn</span><strong>Hoàng Văn Nghĩa</strong><a class="person-phone" href="tel:0912245226">☎ 0912 245 226</a></div>
+<div class="person-box liaison"><span class="person-label">Đầu mối chi nhánh</span><strong>Lưu Thị Hồng Nhung</strong><a class="person-phone" href="tel:0918819928">☎ 0918 819 928</a></div>
+</div></article>
+<article class="branch-card" data-search="lai châu hoàng thị thanh loan 0986899668 nguyễn xuân thịnh 0988919111">
+<div class="branch-card-head"><span class="branch-no">10</span><h3>Lai Châu</h3></div>
+<div class="contact-pair">
+<div class="person-box"><span class="person-label">Cán bộ phụ trách đoàn</span><strong>Hoàng Thị Thanh Loan</strong><a class="person-phone" href="tel:0986899668">☎ 0986 899 668</a></div>
+<div class="person-box liaison"><span class="person-label">Đầu mối chi nhánh</span><strong>Nguyễn Xuân Thịnh</strong><a class="person-phone" href="tel:0988919111">☎ 0988 919 111</a></div>
+</div></article>
+<article class="branch-card" data-search="yên bái trần đại dương 0888198928 phạm thu hương 0912474017">
+<div class="branch-card-head"><span class="branch-no">11</span><h3>Yên Bái</h3></div>
+<div class="contact-pair">
+<div class="person-box"><span class="person-label">Cán bộ phụ trách đoàn</span><strong>Trần Đại Dương</strong><a class="person-phone" href="tel:0888198928">☎ 0888 198 928</a></div>
+<div class="person-box liaison"><span class="person-label">Đầu mối chi nhánh</span><strong>Phạm Thu Hương</strong><a class="person-phone" href="tel:0912474017">☎ 0912 474 017</a></div>
+</div></article>
+<article class="branch-card" data-search="bắc kạn đào việt cường 0912072278 cao thị hải yến 0832898555">
+<div class="branch-card-head"><span class="branch-no">12</span><h3>Bắc Kạn</h3></div>
+<div class="contact-pair">
+<div class="person-box"><span class="person-label">Cán bộ phụ trách đoàn</span><strong>Đào Việt Cường</strong><a class="person-phone" href="tel:0912072278">☎ 0912 072 278</a></div>
+<div class="person-box liaison"><span class="person-label">Đầu mối chi nhánh</span><strong>Cao Thị Hải Yến</strong><a class="person-phone" href="tel:0832898555">☎ 0832 898 555</a></div>
+</div></article>
+<article class="branch-card" data-search="bắc yên bái nguyễn đức duy 0912167666 trần lâm hùng 0398151972">
+<div class="branch-card-head"><span class="branch-no">13</span><h3>Bắc Yên Bái</h3></div>
+<div class="contact-pair">
+<div class="person-box"><span class="person-label">Cán bộ phụ trách đoàn</span><strong>Nguyễn Đức Duy</strong><a class="person-phone" href="tel:0912167666">☎ 0912 167 666</a></div>
+<div class="person-box liaison"><span class="person-label">Đầu mối chi nhánh</span><strong>Trần Lâm Hùng</strong><a class="person-phone" href="tel:0398151972">☎ 0398 151 972</a></div>
+</div></article>
+<article class="branch-card" data-search="cao bằng đào anh tuấn 0912756828 trịnh quốc hưng 0912661055">
+<div class="branch-card-head"><span class="branch-no">14</span><h3>Cao Bằng</h3></div>
+<div class="contact-pair">
+<div class="person-box"><span class="person-label">Cán bộ phụ trách đoàn</span><strong>Đào Anh Tuấn</strong><a class="person-phone" href="tel:0912756828">☎ 0912 756 828</a></div>
+<div class="person-box liaison"><span class="person-label">Đầu mối chi nhánh</span><strong>Trịnh Quốc Hưng</strong><a class="person-phone" href="tel:0912661055">☎ 0912 661 055</a></div>
+</div></article>
+<article class="branch-card" data-search="điện biên dương anh tuấn 0949281628 nguyễn thị tuyết 0942838688">
+<div class="branch-card-head"><span class="branch-no">15</span><h3>Điện Biên</h3></div>
+<div class="contact-pair">
+<div class="person-box"><span class="person-label">Cán bộ phụ trách đoàn</span><strong>Dương Anh Tuấn</strong><a class="person-phone" href="tel:0949281628">☎ 0949 281 628</a></div>
+<div class="person-box liaison"><span class="person-label">Đầu mối chi nhánh</span><strong>Nguyễn Thị Tuyết</strong><a class="person-phone" href="tel:0942838688">☎ 0942 838 688</a></div>
+</div></article>
+<article class="branch-card" data-search="phú thọ hoàng trung dũng 0912245994 mai thị bích hảo 0978603537">
+<div class="branch-card-head"><span class="branch-no">16</span><h3>Phú Thọ</h3></div>
+<div class="contact-pair">
+<div class="person-box"><span class="person-label">Cán bộ phụ trách đoàn</span><strong>Hoàng Trung Dũng</strong><a class="person-phone" href="tel:0912245994">☎ 0912 245 994</a></div>
+<div class="person-box liaison"><span class="person-label">Đầu mối chi nhánh</span><strong>Mai Thị Bích Hảo</strong><a class="person-phone" href="tel:0978603537">☎ 0978 603 537</a></div>
+</div></article>
+<article class="branch-card" data-search="phú thọ ii lương thị kiều oanh 0949280655 trần thị ngọc mai 0943428428">
+<div class="branch-card-head"><span class="branch-no">17</span><h3>Phú Thọ II</h3></div>
+<div class="contact-pair">
+<div class="person-box"><span class="person-label">Cán bộ phụ trách đoàn</span><strong>Lương Thị Kiều Oanh</strong><a class="person-phone" href="tel:0949280655">☎ 0949 280 655</a></div>
+<div class="person-box liaison"><span class="person-label">Đầu mối chi nhánh</span><strong>Trần Thị Ngọc Mai</strong><a class="person-phone" href="tel:0943428428">☎ 0943 428 428</a></div>
+</div></article>
+<article class="branch-card" data-search="nam thái nguyên đinh mạnh tùng lâm 0852188666 tạ thị hải vân 0915247167">
+<div class="branch-card-head"><span class="branch-no">18</span><h3>Nam Thái Nguyên</h3></div>
+<div class="contact-pair">
+<div class="person-box"><span class="person-label">Cán bộ phụ trách đoàn</span><strong>Đinh Mạnh Tùng Lâm</strong><a class="person-phone" href="tel:0852188666">☎ 0852 188 666</a></div>
+<div class="person-box liaison"><span class="person-label">Đầu mối chi nhánh</span><strong>Tạ Thị Hải Vân</strong><a class="person-phone" href="tel:0915247167">☎ 0915 247 167</a></div>
+</div></article>
+<article class="branch-card" data-search="thái nguyên dư chấn hưng 0912265368 trần thị hồng tuấn 0982134115">
+<div class="branch-card-head"><span class="branch-no">19</span><h3>Thái Nguyên</h3></div>
+<div class="contact-pair">
+<div class="person-box"><span class="person-label">Cán bộ phụ trách đoàn</span><strong>Dư Chấn Hưng</strong><a class="person-phone" href="tel:0912265368">☎ 0912 265 368</a></div>
+<div class="person-box liaison"><span class="person-label">Đầu mối chi nhánh</span><strong>Trần Thị Hồng Tuấn</strong><a class="person-phone" href="tel:0982134115">☎ 0982 134 115</a></div>
+</div></article></div>
+<div class="no-results" id="branchNoResults" hidden>Không tìm thấy chi nhánh phù hợp.</div>
 </section>
 <div class="tip"><strong>Lưu ý:</strong> Có thể nhấn vào số điện thoại để gọi trực tiếp trên thiết bị di động.</div>
 </main>
 <footer>Agribank Chi nhánh Lạng Sơn · Hội thao lần thứ X năm 2026</footer>
 <script>
 (function(){
- const input=document.getElementById('branchSearch'), rows=[...document.querySelectorAll('#branchRows tr')], count=document.getElementById('branchCount'), empty=document.getElementById('branchNoResults');
- function norm(s){return s.toLocaleLowerCase('vi').normalize('NFD').replace(/[\\u0300-\\u036f]/g,'').replace(/đ/g,'d')}
+ const input=document.getElementById('branchSearch');
+ const cards=[...document.querySelectorAll('.branch-card')];
+ const count=document.getElementById('branchCount');
+ const empty=document.getElementById('branchNoResults');
+ function norm(s){return s.toLocaleLowerCase('vi').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d')}
  input.addEventListener('input',function(){
   const q=norm(input.value.trim());let shown=0;
-  rows.forEach(row=>{const match=norm(row.innerText).includes(q);row.hidden=!match;if(match)shown++});
-  count.textContent=shown+' / '+rows.length+' chi nhánh';empty.hidden=shown!==0;
+  cards.forEach(card=>{const match=norm(card.innerText).includes(q);card.hidden=!match;if(match)shown++});
+  count.textContent=shown+' / '+cards.length+' chi nhánh';
+  empty.hidden=shown!==0;
  });
 })();
 </script></body></html>
