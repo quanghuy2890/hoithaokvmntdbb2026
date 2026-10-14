@@ -200,3 +200,17 @@ main { width: 100%; max-width: 1800px; margin: 0 auto; }
 .info-card.gallery .card-icon { background: linear-gradient(145deg, #fff4d8, #ffe2ad); color: #9a5b00; }
 .info-card.gallery { border-color: #ead7a8; }
 .info-card.gallery:hover { border-color: #c98a24; }
+
+/* Bảng trận đang diễn ra thay bộ đếm ngược sau giờ khai mạc */
+.live-match-panel{margin:18px auto 0;max-width:980px;text-align:left}
+.live-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.live-kicker{font-size:12px;font-weight:800;letter-spacing:1px;color:#ffe6a5}
+.live-status{display:inline-flex;align-items:center;padding:6px 10px;border-radius:999px;background:#fff0d5;color:#784600;font-size:12px;font-weight:900}
+.live-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.live-card{min-width:0;padding:14px;border:1px solid #ffffff45;border-radius:13px;background:#fffffffa;color:#183247;box-shadow:0 5px 14px #003a2418}
+.live-card-top{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.live-sport{color:#087849;font-size:12px;font-weight:800}.live-time{color:#536574;font-size:12px;font-weight:700}
+.live-teams{display:block;color:#183247;font-size:17px;line-height:1.35}.live-detail{margin-top:7px;color:#617381;font-size:12px;line-height:1.45}
+.live-more{display:inline-block;margin-top:14px;padding:10px 15px;border-radius:10px;background:#fff;color:#075c3b;font-weight:800;text-decoration:none}.live-more:hover{background:#e8f4ec}
+.live-refresh,.live-empty{margin:10px 0 0;color:#e1f2e8;font-size:12px;line-height:1.4}
+@media(max-width:700px){.live-match-panel{margin-top:14px}.live-list{grid-template-columns:1fr}.live-card{padding:12px}.live-teams{font-size:16px}.live-head{align-items:flex-start}}
