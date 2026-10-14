@@ -12,7 +12,6 @@
   const opening = document.querySelector(".opening");
   const heading = document.getElementById("countdown-heading");
   const panel = document.getElementById("live-match-panel");
-  let liveRendered = false;
 
   function parseDate(dateText) {
     const p = dateText.split("/");
@@ -79,18 +78,18 @@
       '<a class="live-more" href="dia-diem-lich-thi-dau.html">Xem toàn bộ lịch và kết quả →</a>' +
       '<p class="live-refresh">Tự cập nhật theo giờ trên thiết bị. Giờ các buổi sáng/chiều/tối là giờ bắt đầu dự kiến của buổi.</p>';
     panel.hidden = false;
-    countdown.hidden = true;
-    if (opening) opening.hidden = true;
-    if (heading) heading.textContent = "Lịch thi đấu đang diễn ra";
-    liveRendered = true;
+    // Trước giờ khai mạc, giữ đồng hồ đếm ngược và hiển thị lịch/trận sắp tới bên dưới.
+    // Chỉ ẩn đồng hồ khi đã đến giờ khai mạc.
+    const beforeOpening = now.getTime() < target;
+    countdown.hidden = !beforeOpening;
+    if (opening) opening.hidden = !beforeOpening;
+    if (heading) heading.textContent = beforeOpening ? "Đếm ngược đến Hội thao" : "Lịch thi đấu đang diễn ra";
   }
   const update = () => {
     const now = new Date();
     const remaining = Math.max(0, Math.floor((target-now.getTime())/1000));
-    if (remaining <= 0) {
-      if (!liveRendered) renderLiveMatches(now);
-      return;
-    }
+    renderLiveMatches(now);
+    if (remaining <= 0) return;
     const values = {
       days:Math.floor(remaining/86400),
       hours:Math.floor((remaining%86400)/3600),
