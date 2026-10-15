@@ -44,18 +44,20 @@
     }));
     (data.volley || []).forEach(r => list.push({
       sport:"🏐 Bóng chuyền hơi nữ",date:r[0],time:r[1],id:r[2],group:"Bảng/vòng "+r[3],
-      teams:r[4],venue:r[5],start:dateTime(r[0],r[1]),duration:50
+      teams:r[4],venue:r[5],start:dateTime(r[0],r[1]),duration:null
     }));
     (data.pickle || []).forEach(r => list.push({
       sport:"🏓 Pickleball",date:r[0],time:r[1],id:r[3],group:r[5]===" "?"":("Bảng/vòng "+r[5]),
-      teams:r[6],venue:"Cụm sân Victory · "+r[2],start:dateTime(r[0],r[1]),duration:35
+      teams:r[6],venue:"Cụm sân Victory · "+r[2],start:dateTime(r[0],r[1]),duration:null
     }));
     return list;
   }
   function renderLiveMatches(now) {
     if (!panel || !window.HOI_THAO_MATCHES) return;
     const matches = collectMatches().filter(m => m.start.getTime() >= target - 24*60*60*1000);
-    const ongoing = matches.filter(m => m.start <= now && now < new Date(m.start.getTime()+m.duration*60000));
+    // Nội quy quy định thời lượng cố định cho bóng đá (2 hiệp x 20 phút, nghỉ 10 phút).
+    // Bóng chuyền và Pickleball kết thúc theo điểm số, không tự đoán thời lượng để gắn nhãn "đang diễn ra".
+    const ongoing = matches.filter(m => m.duration && m.start <= now && now < new Date(m.start.getTime()+m.duration*60000));
     let selected = ongoing.slice(0,3);
     let label = "ĐANG DIỄN RA";
     if (!selected.length) {
