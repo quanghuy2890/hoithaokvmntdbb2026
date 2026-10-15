@@ -19,7 +19,7 @@
 <section class="schedule hidden" id="pickle"><h2>🏓 Lịch Pickleball</h2><p class="meta">Cụm sân Victory · 16–17/10/2026 · Sáng 07h30, chiều 14h00, tối 19h30.</p><div class="filters"><select class="dateFilter"><option value="">Tất cả ngày</option><option>16/10/2026</option><option>17/10/2026</option></select><select class="groupFilter"><option value="">Tất cả nội dung</option><option>Đôi nam trên 45 tuổi</option><option>Đôi nam dưới 46 tuổi</option><option>Đôi nữ trên 45 tuổi</option><option>Đôi nữ dưới 46 tuổi</option><option>Đôi nam nữ trên 45 tuổi</option><option>Đôi nam nữ dưới 46 tuổi</option></select><div class="filter-actions"><button type="button" class="applyScheduleFilter">Tra cứu lịch</button><button type="button" class="resetScheduleFilter btn-secondary">Hiện tất cả</button></div></div><div class="table-wrap"><table><thead><tr><th>Ngày/buổi</th><th>Sân</th><th>Mã trận</th><th>Nội dung</th><th>Bảng/vòng</th><th>Đôi thi đấu</th><th>Kết quả</th></tr></thead><tbody id="pickleRows"></tbody></table></div><div class="notice">Lịch Pickleball có nhiều nội dung và sân. Bảng trên là các trận vòng bảng được nhận diện rõ từ bản lịch PDF; các trận loại trực tiếp và những dòng cần xác minh giữ theo lịch BTC, không tự suy đoán giờ hoặc sân còn thiếu.</div></section>
 
 </main><footer class="footer">Agribank Chi nhánh Lạng Sơn · Hội thao lần thứ X năm 2026</footer>
-<script src="assets/matches.js"></script>
+<script src="assets/matches.js?v=lookup-fix-1"></script>
 <script>
 const football=window.HOI_THAO_MATCHES.football;
 const volley=window.HOI_THAO_MATCHES.volley;
@@ -70,18 +70,18 @@ function search(){
  let found=[];
  sets.forEach(([name,data,id])=>{
    if(sport && sport!==name)return;
-   data.forEach(r=>{if(!q || normalize(r.join(' ')).includes(q))found.push({name,r,id})});
+   data.forEach(r=>{if(!q || normalize(r.join(' ')).includes(q))found.push({name,r,id,index:data.indexOf(r)})});
  });
  if(!found.length){
    out.innerHTML='<div class="empty">Chưa tìm thấy trận phù hợp trong dữ liệu lịch đã nhập. Lịch của một số môn/nội dung có thể chưa được nhập đầy đủ.</div>';
    return;
  }
  out.innerHTML='<p><strong>'+(branch?esc('Agribank CN '+branch):'Toàn bộ lịch thi đấu')+' — tìm thấy '+found.length+' lượt trận</strong><br><span class="small">Các trận chưa thi đấu hoặc chưa được cập nhật tỷ số vẫn được hiển thị với trạng thái “Chưa có kết quả”.</span></p>'+
- found.map(({name,r,id})=>{
+ found.map(({name,r,id,index})=>{
    const match=id==='football'?'Trận '+r[2]+' · Bảng/vòng '+r[3]:id==='volley'?'Trận '+r[2]+' · Bảng/vòng '+r[3]:'Trận '+r[3]+' · Bảng/vòng '+r[5];
    const teams=id==='football'?r[4]:id==='volley'?r[4]:r[6];
    const detail=id==='football'?'Giờ '+r[1]+' · Sân '+r[5]:id==='volley'?'Buổi '+r[1]+' · '+r[5]:'Buổi '+r[1]+' · '+r[2]+' · '+r[4];
-   const ix=data.indexOf(r);const saved=savedResults[id+'-'+ix];const scoreText=saved&&saved.score?('Kết quả: '+saved.score+' · '+(saved.status==='live'?'Đang thi đấu':saved.status==='finished'?'Kết thúc':'Chưa cập nhật')):'Chưa có tỷ số chính thức';return '<article class="result-card"><span class="tag">'+esc(name)+'</span><span class="tag">'+esc(r[0])+'</span><br><strong>'+esc(match)+'</strong><p>'+esc(teams)+'</p><span class="small">'+esc(detail)+' · '+esc(scoreText)+'</span><p><a href="#'+id+'" onclick="switchSport(\''+id+'\');return false">Mở lịch môn này →</a></p></article>';
+   const saved=savedResults[id+'-'+index];const scoreText=saved&&saved.score?('Kết quả: '+saved.score+' · '+(saved.status==='live'?'Đang thi đấu':saved.status==='finished'?'Kết thúc':'Chưa cập nhật')):'Chưa có tỷ số chính thức';return '<article class="result-card"><span class="tag">'+esc(name)+'</span><span class="tag">'+esc(r[0])+'</span><br><strong>'+esc(match)+'</strong><p>'+esc(teams)+'</p><span class="small">'+esc(detail)+' · '+esc(scoreText)+'</span><p><a href="#'+id+'" onclick="switchSport(\''+id+'\');return false">Mở lịch môn này →</a></p></article>';
  }).join('');
 }
 </script></body></html>
