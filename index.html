@@ -109,8 +109,20 @@
     </div>
     <div style="max-width:1200px;margin:0 auto;padding:0 20px 18px;text-align:center">
     </div>
+    <div id="visitor-counter" style="text-align:center;padding:0 12px 12px;color:#d7e8df;font:12px/1.4 Arial,sans-serif;opacity:.9" aria-live="polite">Lượt truy cập: đang cập nhật…</div>
   </footer>
 
+  <script>
+    fetch('api/visitors.php', {cache:'no-store', credentials:'same-origin'})
+      .then(r => r.ok ? r.json() : Promise.reject())
+      .then(data => {
+        const el = document.getElementById('visitor-counter');
+        if (el && data.ok && Number.isFinite(Number(data.count))) {
+          el.textContent = 'Lượt truy cập: ' + Number(data.count).toLocaleString('vi-VN');
+        } else if (el) { el.textContent = ''; }
+      })
+      .catch(() => { const el = document.getElementById('visitor-counter'); if (el) el.textContent = ''; });
+  </script>
   <script src="assets/matches.js?v=live-match-3" defer></script>
   <script src="assets/app.js?v=live-match-3" defer></script>
 </body>
