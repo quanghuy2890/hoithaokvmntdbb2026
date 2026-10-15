@@ -70,7 +70,7 @@ function search(){
  let found=[];
  sets.forEach(([name,data,id])=>{
    if(sport && sport!==name)return;
-   data.forEach(r=>{if(!q || normalize(r.join(' ')).includes(q))found.push({name,r,id,index:data.indexOf(r)})});
+   data.forEach((r,index)=>{if(!q || normalize(r.join(' ')).includes(q))found.push({name,r,id,index})});
  });
  if(!found.length){
    out.innerHTML='<div class="empty">Chưa tìm thấy trận phù hợp trong dữ liệu lịch đã nhập. Lịch của một số môn/nội dung có thể chưa được nhập đầy đủ.</div>';
