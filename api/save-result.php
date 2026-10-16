@@ -1,4 +1,13 @@
 <?php
+$secure = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
+session_name('AGRIBANK_ADMIN');
+session_set_cookie_params([
+  'lifetime' => 0,
+  'path' => '/',
+  'secure' => $secure,
+  'httponly' => true,
+  'samesite' => 'Lax',
+]);
 session_start();
 header('Content-Type: application/json; charset=utf-8');
 if (empty($_SESSION['sports_admin'])) { http_response_code(401); echo json_encode(['ok'=>false,'message'=>'Vui lòng đăng nhập quản trị.']); exit; }
