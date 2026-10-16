@@ -1,9 +1,17 @@
 <?php
-// ADMIN-V12: prevent browser/proxy/PHP cache from serving an older admin page.
+// ADMIN-V13: dedicated session cookie + explicit cookie settings for shared hosting.
 header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
-header('Cache-Control: post-check=0, pre-check=0', false);
 header('Pragma: no-cache');
 header('Expires: 0');
+$secure = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
+session_name('AGRIBANK_ADMIN');
+session_set_cookie_params([
+  'lifetime' => 0,
+  'path' => '/',
+  'secure' => $secure,
+  'httponly' => true,
+  'samesite' => 'Lax',
+]);
 session_start();
 if (empty($_SESSION['sports_admin'])) { header('Location: login.php'); exit; }
 ?><!doctype html>
@@ -12,7 +20,7 @@ if (empty($_SESSION['sports_admin'])) { header('Location: login.php'); exit; }
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta http-equiv="Cache-Control" content="no-store">
-<title>ADMIN-V12 · Nhập kết quả Hội thao Agribank 2026</title>
+<title>ADMIN-V13 · Nhập kết quả Hội thao Agribank 2026</title>
 <style>
 :root{--g:#087849;--gd:#075b3b;--ink:#173b2d;--line:#dbe5df;--bg:#f3f7f4}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);font:16px Arial,sans-serif;color:var(--ink)}
@@ -34,7 +42,7 @@ main{max-width:1200px;margin:22px auto;padding:0 14px}.panel{background:white;bo
 <header>
 <h1>Nhập và cập nhật kết quả thi đấu</h1>
 <p>Hội thao Agribank lần thứ X · Khu vực Miền núi và Trung du Bắc Bộ · Năm 2026</p>
-<span class="badge">ADMIN-V12 · BẢN KHÔNG CACHE</span>
+<span class="badge">ADMIN-V13 · PHIÊN ĐĂNG NHẬP ỔN ĐỊNH</span>
 <div class="actions"><a href="../dia-diem-lich-thi-dau.html" target="_blank">Xem lịch công khai ↗</a><a href="logout.php">Đăng xuất</a></div>
 </header>
 <main>
@@ -49,8 +57,8 @@ main{max-width:1200px;margin:22px auto;padding:0 14px}.panel{background:white;bo
 </section>
 <section class="panel"><div id="matches"></div></section>
 </main>
-<script src="../assets/matches.js?v=admin-v12"></script>
-<script src="../assets/matches-extra.js?v=admin-v12"></script>
+<script src="../assets/matches.js?v=admin-v13"></script>
+<script src="../assets/matches-extra.js?v=admin-v13"></script>
 <script>
 const datasets={football:window.HOI_THAO_MATCHES.football,volley:window.HOI_THAO_MATCHES.volley,pickle:window.HOI_THAO_MATCHES.pickle};
 const names={football:'Bóng đá mini nam',volley:'Bóng chuyền hơi nữ',pickle:'Pickleball'};let saved={};
