@@ -1,7 +1,7 @@
 /* Compatibility wrapper: preserve the previously approved Pickleball additions from the immutable commit,
    then restore the original Agribank branch/branch + sport lookup UI and behavior. */
 (function(){
-  const legacy="https://raw.githubusercontent.com/quanghuy2890/hoithaokvmntdbb2026/a32a7a2c11f235895128a61c2b062587be956056/assets/matches-extra.js";
+  const legacy="https://raw.githubusercontent.com/quanghuy2890/hoithaokvmntdbb2026/8be831fe54cb9a0b9d4b30a735da8a2308bfdda0/assets/matches-extra.js";
   const s=document.createElement("script");
   s.src=legacy;
   s.onload=initLookup;
