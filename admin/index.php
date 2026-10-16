@@ -38,7 +38,7 @@ main{max-width:1200px;margin:22px auto;padding:0 14px}.panel{background:white;bo
 @media(max-width:460px){.match{grid-template-columns:1fr}.match .fixture{grid-column:auto}}
 </style>
 </head>
-<body>
+<body data-admin="1">
 <header>
 <h1>Nhập và cập nhật kết quả thi đấu</h1>
 <p>Hội thao Agribank lần thứ X · Khu vực Miền núi và Trung du Bắc Bộ · Năm 2026</p>
@@ -57,8 +57,8 @@ main{max-width:1200px;margin:22px auto;padding:0 14px}.panel{background:white;bo
 </section>
 <section class="panel"><div id="matches"></div></section>
 </main>
-<script src="../assets/matches.js?v=admin-v13"></script>
-<script src="../assets/matches-extra.js?v=admin-v13"></script>
+<script src="../assets/matches.js?v=admin-v14"></script>
+<script src="../assets/matches-extra.js?v=admin-v14"></script>
 <script>
 const datasets={football:window.HOI_THAO_MATCHES.football,volley:window.HOI_THAO_MATCHES.volley,pickle:window.HOI_THAO_MATCHES.pickle};
 const names={football:'Bóng đá mini nam',volley:'Bóng chuyền hơi nữ',pickle:'Pickleball'};let saved={};
