@@ -19,6 +19,9 @@
     return M;
   })();
   window.HOI_THAO_MATCHES_READY=ready;
+  // Admin page uses its own result-entry UI. Keep the shared Pickleball data loader,
+  // but do not replace the admin panel with the public branch-lookup UI.
+  if (document.body && document.body.dataset.admin === "1") return;
   const panel=document.querySelector(".panel");
   if(!panel) return;
   const esc=v=>String(v??"").replace(/[&<>\"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'\"':"&quot;","'":"&#39;"}[c]));
