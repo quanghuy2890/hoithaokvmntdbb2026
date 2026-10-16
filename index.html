@@ -10,13 +10,18 @@
   <link rel="stylesheet" href="assets/style.css?v=live-match-2">
   <style>
     .welcome-ticker{position:relative;overflow:hidden;display:flex;align-items:center;gap:clamp(12px,2vw,26px);min-height:74px;padding:14px clamp(16px,4vw,52px);background:linear-gradient(100deg,#064d34 0%,#087849 48%,#0b6544 100%);border-top:3px solid #e5c36b;border-bottom:3px solid #e5c36b;box-shadow:0 5px 16px #063d2a24;color:#fff}
-    .welcome-label{flex:0 0 auto;color:#ffe7a2;font-weight:900;font-size:clamp(13px,1.5vw,17px);letter-spacing:.7px;white-space:nowrap;text-shadow:0 1px 2px #002d1c}
     .welcome-track{display:flex;align-items:center;gap:28px;min-width:0;white-space:nowrap;animation:welcome-scroll 32s linear infinite;font-size:clamp(15px,1.8vw,21px);font-weight:900;letter-spacing:.35px;text-shadow:0 2px 3px #003c26}
     .welcome-track span:nth-child(even){color:#ffe7a2}
     .welcome-ticker:hover .welcome-track{animation-play-state:paused}
     @keyframes welcome-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
     @media(max-width:640px){.welcome-ticker{align-items:flex-start;flex-direction:column;gap:7px;padding:12px 16px}.welcome-track{font-size:15px;animation-duration:28s}}
     @media(prefers-reduced-motion:reduce){.welcome-track{animation:none;white-space:normal;flex-wrap:wrap}}
+    .event-live .section-kicker{color:#087849}
+    .event-live .section-kicker .kicker-icon{color:#0b9a5b}
+    .event-live #countdown-heading{margin-bottom:12px}
+    .event-live .opening{margin-top:8px}
+    .event-live .live-match-panel{margin-top:20px}
+    .event-finished .section-kicker{color:#68756f}
   </style>
 </head>
 <body>
@@ -37,7 +42,7 @@
 
     <section class="countdown-section" aria-labelledby="countdown-heading">
       <div class="countdown-wrap">
-        <div class="section-kicker"><span class="kicker-icon" aria-hidden="true">◷</span> SỰ KIỆN SẮP DIỄN RA</div>
+        <div class="section-kicker"><span class="kicker-icon" aria-hidden="true">◷</span> <span id="event-status-label">SỰ KIỆN SẮP DIỄN RA</span></div>
         <h1 id="countdown-heading">Đếm ngược đến Hội thao</h1>
         <div class="countdown" data-target="2026-10-16T07:30:00+07:00" aria-live="off">
           <div class="time-box"><strong id="days">--</strong><span>Ngày</span></div>
@@ -45,7 +50,7 @@
           <div class="time-box"><strong id="minutes">--</strong><span>Phút</span></div>
           <div class="time-box"><strong id="seconds">--</strong><span>Giây</span></div>
         </div>
-        <p class="opening"><span class="opening-icon" aria-hidden="true">◷</span> Khai mạc lúc <strong>07h30 ngày 16/10/2026</strong> tại Lạng Sơn</p>
+        <p class="opening"><span class="opening-icon" aria-hidden="true">◷</span> <span id="opening-text">Khai mạc lúc <strong>07h30 ngày 16/10/2026</strong> tại Lạng Sơn</span></p>
         <div id="live-match-panel" class="live-match-panel" hidden aria-live="polite"></div>
       </div>
     </section>
@@ -58,36 +63,12 @@
       </div>
 
       <div class="quick-links">
-        <a class="info-card red" id="ban-to-chuc" href="ban-to-chuc.html">
-          <span class="card-icon" aria-hidden="true">♟</span>
-          <span class="card-copy"><strong>Ban tổ chức</strong><small>Thành viên, nhiệm vụ và phân công</small></span>
-          <span class="card-arrow" aria-hidden="true">›</span>
-        </a>
-        <a class="info-card green" id="dia-diem" href="dia-diem-lich-thi-dau.html">
-          <span class="card-icon" aria-hidden="true">📅</span>
-          <span class="card-copy"><strong>Địa điểm &amp; lịch thi đấu</strong><small>Địa điểm thi đấu và lịch các môn</small></span>
-          <span class="card-arrow" aria-hidden="true">›</span>
-        </a>
-        <a class="info-card orange" id="lien-he" href="dau-moi-lien-he.html">
-          <span class="card-icon" aria-hidden="true">☎</span>
-          <span class="card-copy"><strong>Đầu mối liên hệ</strong><small>Thi đấu, hậu cần và truyền thông</small></span>
-          <span class="card-arrow" aria-hidden="true">›</span>
-        </a>
-        <a class="info-card blue" id="noi-quy" href="noi-quy-hoi-thao.html">
-          <span class="card-icon" aria-hidden="true">📋</span>
-          <span class="card-copy"><strong>Nội quy Hội thao</strong><small>Quy định và lưu ý dành cho các đoàn</small></span>
-          <span class="card-arrow" aria-hidden="true">›</span>
-        </a>
-        <a class="info-card purple" id="lang-son" href="ve-lang-son.html">
-          <span class="card-icon" aria-hidden="true">🏞️</span>
-          <span class="card-copy"><strong>Về Lạng Sơn</strong><small>Danh thắng, văn hóa và ẩm thực Xứ Lạng</small></span>
-          <span class="card-arrow" aria-hidden="true">›</span>
-        </a>
-        <a class="info-card gallery" id="hinh-anh-hoi-thao" href="hinh-anh-hoi-thao.html">
-          <span class="card-icon" aria-hidden="true">📸</span>
-          <span class="card-copy"><strong>Hình ảnh đẹp về Hội thao</strong><small>Khoảnh khắc, hoạt động và hình ảnh đáng nhớ</small></span>
-          <span class="card-arrow" aria-hidden="true">›</span>
-        </a>
+        <a class="info-card red" id="ban-to-chuc" href="ban-to-chuc.html"><span class="card-icon" aria-hidden="true">♟</span><span class="card-copy"><strong>Ban tổ chức</strong><small>Thành viên, nhiệm vụ và phân công</small></span><span class="card-arrow" aria-hidden="true">›</span></a>
+        <a class="info-card green" id="dia-diem" href="dia-diem-lich-thi-dau.html"><span class="card-icon" aria-hidden="true">📅</span><span class="card-copy"><strong>Địa điểm &amp; lịch thi đấu</strong><small>Địa điểm thi đấu và lịch các môn</small></span><span class="card-arrow" aria-hidden="true">›</span></a>
+        <a class="info-card orange" id="lien-he" href="dau-moi-lien-he.html"><span class="card-icon" aria-hidden="true">☎</span><span class="card-copy"><strong>Đầu mối liên hệ</strong><small>Thi đấu, hậu cần và truyền thông</small></span><span class="card-arrow" aria-hidden="true">›</span></a>
+        <a class="info-card blue" id="noi-quy" href="noi-quy-hoi-thao.html"><span class="card-icon" aria-hidden="true">📋</span><span class="card-copy"><strong>Nội quy Hội thao</strong><small>Quy định và lưu ý dành cho các đoàn</small></span><span class="card-arrow" aria-hidden="true">›</span></a>
+        <a class="info-card purple" id="lang-son" href="ve-lang-son.html"><span class="card-icon" aria-hidden="true">🏞️</span><span class="card-copy"><strong>Về Lạng Sơn</strong><small>Danh thắng, văn hóa và ẩm thực Xứ Lạng</small></span><span class="card-arrow" aria-hidden="true">›</span></a>
+        <a class="info-card gallery" id="hinh-anh-hoi-thao" href="hinh-anh-hoi-thao.html"><span class="card-icon" aria-hidden="true">📸</span><span class="card-copy"><strong>Hình ảnh đẹp về Hội thao</strong><small>Khoảnh khắc, hoạt động và hình ảnh đáng nhớ</small></span><span class="card-arrow" aria-hidden="true">›</span></a>
       </div>
     </section>
   </main>
@@ -107,8 +88,7 @@
         <span>Truy cập website Hội thao</span>
       </a>
     </div>
-    <div style="max-width:1200px;margin:0 auto;padding:0 20px 18px;text-align:center">
-    </div>
+    <div style="max-width:1200px;margin:0 auto;padding:0 20px 18px;text-align:center"></div>
     <div id="visitor-counter" style="text-align:center;padding:0 12px 12px;color:#d7e8df;font:12px/1.4 Arial,sans-serif;opacity:.9" aria-live="polite">Lượt truy cập: đang cập nhật…</div>
   </footer>
 
@@ -117,13 +97,12 @@
       .then(r => r.ok ? r.json() : Promise.reject())
       .then(data => {
         const el = document.getElementById('visitor-counter');
-        if (el && data.ok && Number.isFinite(Number(data.count))) {
-          el.textContent = 'Lượt truy cập: ' + Number(data.count).toLocaleString('vi-VN');
-        } else if (el) { el.textContent = ''; }
+        if (el && data.ok && Number.isFinite(Number(data.count))) el.textContent = 'Lượt truy cập: ' + Number(data.count).toLocaleString('vi-VN');
+        else if (el) el.textContent = '';
       })
       .catch(() => { const el = document.getElementById('visitor-counter'); if (el) el.textContent = ''; });
   </script>
-  <script src="assets/matches.js?v=live-match-3" defer></script>
-  <script src="assets/app.js?v=live-match-3" defer></script>
+  <script src="assets/matches.js?v=live-match-4" defer></script>
+  <script src="assets/app.js?v=live-match-4" defer></script>
 </body>
 </html>
