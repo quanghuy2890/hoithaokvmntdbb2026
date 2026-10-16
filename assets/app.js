@@ -55,9 +55,10 @@
     return '<article class="live-card live-card-'+status+'"><div class="live-card-top"><span class="live-sport">'+esc(m.sport)+'</span><span class="live-time">'+esc(m.date)+' · '+esc(time(m.start))+'</span></div><div class="live-card-status">'+badge+'</div><strong class="live-teams">'+esc(m.teams)+'</strong><div class="live-detail">'+esc(m.group)+' · '+esc(m.venue)+'</div></article>';
   }
   function group(title, status, items, time) {
-    const open = status !== "finished" ? " open" : "";
+    // Mặc định thu gọn cả 3 nhóm để trang chủ không bị kéo quá dài.
+    // Người xem bấm vào tiêu đề nhóm để mở/thu gọn danh sách trận.
     const content = items.length ? '<div class="live-list">'+items.map(m=>card(m,status,time)).join("")+'</div>' : '<p class="live-empty">Chưa có trận '+(status==='live'?'đang diễn ra':status==='upcoming'?'sắp đến giờ':'đã kết thúc')+' theo lịch hiện tại.</p>';
-    return '<details class="match-group match-group-'+status+'"'+open+'><summary class="match-group-head"><span>'+title+'</span><b>'+items.length+'</b><i aria-hidden="true">⌄</i></summary>'+content+'</details>';
+    return '<details class="match-group match-group-'+status+'"><summary class="match-group-head"><span>'+title+'</span><b>'+items.length+'</b><i aria-hidden="true">⌄</i></summary>'+content+'</details>';
   }
   function renderMatches(now, results) {
     if (!panel || !window.HOI_THAO_MATCHES) return;
