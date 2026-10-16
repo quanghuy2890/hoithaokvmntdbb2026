@@ -3,6 +3,7 @@
   const countdown = document.querySelector(".countdown");
   if (!countdown) return;
   const target = new Date(countdown.dataset.target).getTime();
+  const eventEnd = new Date("2026-10-18T10:00:00+07:00").getTime();
   const fields = {
     days: document.getElementById("days"),
     hours: document.getElementById("hours"),
@@ -10,8 +11,11 @@
     seconds: document.getElementById("seconds")
   };
   const opening = document.querySelector(".opening");
+  const openingText = document.getElementById("opening-text");
   const heading = document.getElementById("countdown-heading");
+  const statusLabel = document.getElementById("event-status-label");
   const panel = document.getElementById("live-match-panel");
+  const section = document.querySelector(".countdown-section");
 
   function parseDate(dateText) {
     const p = dateText.split("/");
@@ -40,7 +44,7 @@
     const list = [];
     (data.football || []).forEach(r => list.push({
       sport:"⚽ Bóng đá mini nam",date:r[0],time:r[1],id:r[2],group:"Bảng/vòng "+r[3],
-      teams:r[4],venue:"Sân vận động Đông Kinh · Sân "+r[5],start:dateTime(r[0],r[1]),duration:90
+      teams:r[4],venue:"Sân vận động Đông Kinh · Sân "+r[5],start:dateTime(r[0],r[1]),duration:50
     }));
     (data.volley || []).forEach(r => list.push({
       sport:"🏐 Bóng chuyền hơi nữ",date:r[0],time:r[1],id:r[2],group:"Bảng/vòng "+r[3],
@@ -55,8 +59,6 @@
   function renderLiveMatches(now) {
     if (!panel || !window.HOI_THAO_MATCHES) return;
     const matches = collectMatches().filter(m => m.start.getTime() >= target - 24*60*60*1000);
-    // Nội quy quy định thời lượng cố định cho bóng đá (2 hiệp x 20 phút, nghỉ 10 phút).
-    // Bóng chuyền và Pickleball kết thúc theo điểm số, không tự đoán thời lượng để gắn nhãn "đang diễn ra".
     const ongoing = matches.filter(m => m.duration && m.start <= now && now < new Date(m.start.getTime()+m.duration*60000));
     let selected = ongoing.slice(0,3);
     let label = "ĐANG DIỄN RA";
@@ -73,24 +75,35 @@
       }
     }
     const time = d => d.toLocaleTimeString("vi-VN",{hour:"2-digit",minute:"2-digit",hour12:false});
-    panel.innerHTML = '<div class="live-head"><span class="live-kicker">● CẬP NHẬT THEO LỊCH THI ĐẤU</span><span class="live-status">'+label+'</span></div>' +
+    panel.innerHTML = '<div class="live-head"><span class="live-kicker">● CÁC TRẬN ĐẤU TIẾP THEO</span><span class="live-status">'+label+'</span></div>' +
       (selected.length ? '<div class="live-list">'+selected.map(m =>
         '<article class="live-card"><div class="live-card-top"><span class="live-sport">'+esc(m.sport)+'</span><span class="live-time">'+esc(m.date)+' · '+esc(time(m.start))+'</span></div><strong class="live-teams">'+esc(m.teams)+'</strong><div class="live-detail">'+esc(m.group)+' · '+esc(m.venue)+'</div></article>'
       ).join("")+'</div>' : '<p class="live-empty">Chưa có trận nào trong dữ liệu lịch sắp tới. Vui lòng xem lịch thi đấu chi tiết.</p>') +
       '<a class="live-more" href="dia-diem-lich-thi-dau.html">Xem toàn bộ lịch và kết quả →</a>' +
       '<p class="live-refresh">Tự cập nhật theo giờ trên thiết bị. Giờ các buổi sáng/chiều/tối là giờ bắt đầu dự kiến của buổi.</p>';
     panel.hidden = false;
-    // Trước giờ khai mạc, giữ đồng hồ đếm ngược và hiển thị lịch/trận sắp tới bên dưới.
-    // Chỉ ẩn đồng hồ khi đã đến giờ khai mạc.
+  }
+  function updateEventState(now) {
     const beforeOpening = now.getTime() < target;
-    countdown.hidden = !beforeOpening;
-    if (opening) opening.hidden = !beforeOpening;
-    if (heading) heading.textContent = beforeOpening ? "Đếm ngược đến Hội thao" : "Lịch thi đấu đang diễn ra";
+    const finished = now.getTime() >= eventEnd;
+    if (section) {
+      section.classList.toggle("event-live", !beforeOpening && !finished);
+      section.classList.toggle("event-finished", finished);
+    }
+    if (countdown) countdown.hidden = !beforeOpening;
+    if (opening) opening.hidden = false;
+    if (statusLabel) statusLabel.textContent = beforeOpening ? "SỰ KIỆN SẮP DIỄN RA" : (finished ? "HỘI THAO ĐÃ KẾT THÚC" : "HỘI THAO ĐANG DIỄN RA");
+    if (heading) heading.textContent = beforeOpening ? "Đếm ngược đến Hội thao" : (finished ? "Kết quả và lịch thi đấu" : "Các trận đấu hôm nay");
+    if (openingText && !beforeOpening) openingText.innerHTML = finished
+      ? "Hội thao đã hoàn thành chương trình thi đấu tại Lạng Sơn."
+      : "Khai mạc lúc <strong>07h30 ngày 16/10/2026</strong> · Hội thao đang diễn ra tại Lạng Sơn";
+    return {beforeOpening, finished};
   }
   const update = () => {
     const now = new Date();
     const remaining = Math.max(0, Math.floor((target-now.getTime())/1000));
-    renderLiveMatches(now);
+    const state = updateEventState(now);
+    if (!state.finished) renderLiveMatches(now);
     if (remaining <= 0) return;
     const values = {
       days:Math.floor(remaining/86400),
