@@ -34,9 +34,9 @@
     const data = window.HOI_THAO_MATCHES;
     if (!data) return [];
     const list = [];
-    (data.football || []).forEach(r => list.push({sport:"⚽ Bóng đá mini nam",date:r[0],time:r[1],id:r[2],group:"Bảng/vòng "+r[3],teams:r[4],venue:"Sân vận động Đông Kinh · Sân "+r[5],start:dateTime(r[0],r[1]),duration:50}));
-    (data.volley || []).forEach(r => list.push({sport:"🏐 Bóng chuyền hơi nữ",date:r[0],time:r[1],id:r[2],group:"Bảng/vòng "+r[3],teams:r[4],venue:r[5],start:dateTime(r[0],r[1]),duration:75}));
-    (data.pickle || []).forEach(r => list.push({sport:"🏓 Pickleball",date:r[0],time:r[1],id:r[3],group:r[5]===" "?"":("Bảng/vòng "+r[5]),teams:r[6],venue:"Cụm sân Victory · "+r[2],start:dateTime(r[0],r[1]),duration:45}));
+    (data.football || []).forEach(r => list.push({sport:"⚽ Bóng đá mini nam",date:r[0],time:r[1],id:r[2],group:"Bảng/vòng "+r[3],teams:r[4],venue:"Sân vận động Đông Kinh · Sân "+r[5],start:dateTime(r[0],r[1]),duration:50,type:"football"}));
+    (data.volley || []).forEach(r => list.push({sport:"🏐 Bóng chuyền hơi nữ",date:r[0],time:r[1],id:r[2],group:"Bảng/vòng "+r[3],teams:r[4],venue:r[5],start:dateTime(r[0],r[1]),duration:null,type:"volley"}));
+    (data.pickle || []).forEach(r => list.push({sport:"🏓 Pickleball",date:r[0],time:r[1],id:r[3],group:r[5]===" "?"":("Bảng/vòng "+r[5]),teams:r[6],venue:"Cụm sân Victory · "+r[2],start:dateTime(r[0],r[1]),duration:null,type:"pickle"}));
     return list;
   }
   function getResultMap() {
@@ -44,19 +44,30 @@
   }
   function classify(m, now, results) {
     const saved = results[m.id];
-    if (saved && saved.status === "live") return "live";
+
+    // Kết quả do Ban tổ chức cập nhật luôn được ưu tiên cho mọi môn.
     if (saved && saved.status === "finished") return "finished";
-    if (m.start > now) return "upcoming";
-    if (m.start <= now && now < new Date(m.start.getTime() + m.duration * 60000)) return "live";
-    return "finished";
+    if (saved && saved.status === "live") return "live";
+
+    // Chỉ bóng đá có thời lượng cố định theo nội quy: 2 hiệp x 20 phút,
+    // nghỉ giữa hiệp 10 phút. Nếu đã qua khung 50 phút mà chưa có kết quả,
+    // coi là đã kết thúc theo lịch.
+    if (m.type === "football") {
+      if (m.start > now) return "upcoming";
+      if (now < new Date(m.start.getTime() + m.duration * 60000)) return "live";
+      return "finished";
+    }
+
+    // Bóng chuyền và Pickleball không giới hạn thời gian theo phút.
+    // Sau giờ dự kiến, chỉ coi là đang diễn ra; chỉ chuyển sang "ĐÃ KẾT THÚC"
+    // khi Ban tổ chức cập nhật kết quả/trạng thái finished.
+    return m.start > now ? "upcoming" : "live";
   }
   function card(m, status, time) {
     const badge = status === "live" ? "ĐANG DIỄN RA" : status === "upcoming" ? "SẮP ĐẾN GIỜ" : "ĐÃ KẾT THÚC";
     return '<article class="live-card live-card-'+status+'"><div class="live-card-top"><span class="live-sport">'+esc(m.sport)+'</span><span class="live-time">'+esc(m.date)+' · '+esc(time(m.start))+'</span></div><div class="live-card-status">'+badge+'</div><strong class="live-teams">'+esc(m.teams)+'</strong><div class="live-detail">'+esc(m.group)+' · '+esc(m.venue)+'</div></article>';
   }
   function group(title, status, items, time) {
-    // Mặc định thu gọn cả 3 nhóm để trang chủ không bị kéo quá dài.
-    // Người xem bấm vào tiêu đề nhóm để mở/thu gọn danh sách trận.
     const content = items.length ? '<div class="live-list">'+items.map(m=>card(m,status,time)).join("")+'</div>' : '<p class="live-empty">Chưa có trận '+(status==='live'?'đang diễn ra':status==='upcoming'?'sắp đến giờ':'đã kết thúc')+' theo lịch hiện tại.</p>';
     return '<details class="match-group match-group-'+status+'"><summary class="match-group-head"><span>'+title+'</span><b>'+items.length+'</b><i aria-hidden="true">⌄</i></summary>'+content+'</details>';
   }
