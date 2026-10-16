@@ -1,4 +1,14 @@
 <?php
+// Use a dedicated admin session cookie so it cannot collide with another PHP app on the same hosting account.
+$secure = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
+session_name('AGRIBANK_ADMIN');
+session_set_cookie_params([
+  'lifetime' => 0,
+  'path' => '/',
+  'secure' => $secure,
+  'httponly' => true,
+  'samesite' => 'Lax',
+]);
 session_start();
 require_once __DIR__ . '/../config.php';
 if (!empty($_SESSION['sports_admin'])) { header('Location: index.php'); exit; }
@@ -7,7 +17,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $user = (string)($_POST['username'] ?? '');
   $pass = (string)($_POST['password'] ?? '');
   if (hash_equals(ADMIN_USER, $user) && ADMIN_PASSWORD_HASH !== 'PASTE_PASSWORD_HASH_HERE' && password_verify($pass, ADMIN_PASSWORD_HASH)) {
-    session_regenerate_id(true); $_SESSION['sports_admin'] = ADMIN_USER; header('Location: index.php'); exit;
+    // Keep the existing session data while changing the ID; deleting the old session immediately
+    // can cause a lost login on some shared hosts.
+    session_regenerate_id(false);
+    $_SESSION['sports_admin'] = ADMIN_USER;
+    $_SESSION['logged_in_at'] = time();
+    session_write_close();
+    header('Location: index.php');
+    exit;
   }
   $error = 'Thông tin đăng nhập không đúng hoặc chưa cấu hình mật khẩu quản trị.';
 }
