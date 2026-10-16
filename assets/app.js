@@ -8,105 +8,16 @@
   const statusLabel = document.getElementById("event-status-label");
   const panel = document.getElementById("live-match-panel");
   const section = document.querySelector(".countdown-section");
-
-  function parseDate(dateText) {
-    const p = dateText.split("/");
-    return new Date(Number(p[2]), Number(p[1]) - 1, Number(p[0]), 0, 0, 0, 0);
-  }
-  function parseTime(timeText) {
-    const m = String(timeText).match(/(\d{1,2})h(\d{2})/i);
-    if (m) return {h:Number(m[1]),m:Number(m[2])};
-    const session = String(timeText).toLocaleLowerCase("vi");
-    if (session.includes("sáng")) return {h:7,m:30};
-    if (session.includes("chiều")) return {h:14,m:0};
-    if (session.includes("tối")) return {h:19,m:30};
-    return {h:7,m:30};
-  }
-  function dateTime(dateText,timeText) {
-    const d = parseDate(dateText), t = parseTime(timeText);
-    d.setHours(t.h,t.m,0,0);
-    return d;
-  }
-  function esc(s) {
-    return String(s).replace(/[&<>\"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'\"':"&quot;","'":"&#39;"}[ch]));
-  }
-  function collectMatches() {
-    const data = window.HOI_THAO_MATCHES;
-    if (!data) return [];
-    const list = [];
-    (data.football || []).forEach(r => list.push({sport:"⚽ Bóng đá mini nam",date:r[0],time:r[1],id:r[2],group:"Bảng/vòng "+r[3],teams:r[4],venue:"Sân vận động Đông Kinh · Sân "+r[5],start:dateTime(r[0],r[1]),duration:50,type:"football"}));
-    (data.volley || []).forEach(r => list.push({sport:"🏐 Bóng chuyền hơi nữ",date:r[0],time:r[1],id:r[2],group:"Bảng/vòng "+r[3],teams:r[4],venue:r[5],start:dateTime(r[0],r[1]),duration:null,type:"volley"}));
-    (data.pickle || []).forEach(r => list.push({sport:"🏓 Pickleball",date:r[0],time:r[1],id:r[3],group:r[5]===" "?"":("Bảng/vòng "+r[5]),teams:r[6],venue:"Cụm sân Victory · "+r[2],start:dateTime(r[0],r[1]),duration:null,type:"pickle"}));
-    return list;
-  }
-  function getResultMap() {
-    return fetch("api/results.php", {cache:"no-store"}).then(r => r.ok ? r.json() : Promise.reject()).then(data => data && data.ok ? (data.results || {}) : {}).catch(() => ({}));
-  }
-  function classify(m, now, results) {
-    const saved = results[m.id];
-
-    // Kết quả do Ban tổ chức cập nhật luôn được ưu tiên cho mọi môn.
-    if (saved && saved.status === "finished") return "finished";
-    if (saved && saved.status === "live") return "live";
-
-    // Chỉ bóng đá có thời lượng cố định theo nội quy: 2 hiệp x 20 phút,
-    // nghỉ giữa hiệp 10 phút. Nếu đã qua khung 50 phút mà chưa có kết quả,
-    // coi là đã kết thúc theo lịch.
-    if (m.type === "football") {
-      if (m.start > now) return "upcoming";
-      if (now < new Date(m.start.getTime() + m.duration * 60000)) return "live";
-      return "finished";
-    }
-
-    // Bóng chuyền và Pickleball không giới hạn thời gian theo phút.
-    // Sau giờ dự kiến, chỉ coi là đang diễn ra; chỉ chuyển sang "ĐÃ KẾT THÚC"
-    // khi Ban tổ chức cập nhật kết quả/trạng thái finished.
-    return m.start > now ? "upcoming" : "live";
-  }
-  function card(m, status, time) {
-    const badge = status === "live" ? "ĐANG DIỄN RA" : status === "upcoming" ? "SẮP ĐẾN GIỜ" : "ĐÃ KẾT THÚC";
-    return '<article class="live-card live-card-'+status+'"><div class="live-card-top"><span class="live-sport">'+esc(m.sport)+'</span><span class="live-time">'+esc(m.date)+' · '+esc(time(m.start))+'</span></div><div class="live-card-status">'+badge+'</div><strong class="live-teams">'+esc(m.teams)+'</strong><div class="live-detail">'+esc(m.group)+' · '+esc(m.venue)+'</div></article>';
-  }
-  function group(title, status, items, time) {
-    const content = items.length ? '<div class="live-list">'+items.map(m=>card(m,status,time)).join("")+'</div>' : '<p class="live-empty">Chưa có trận '+(status==='live'?'đang diễn ra':status==='upcoming'?'sắp đến giờ':'đã kết thúc')+' theo lịch hiện tại.</p>';
-    return '<details class="match-group match-group-'+status+'"><summary class="match-group-head"><span>'+title+'</span><b>'+items.length+'</b><i aria-hidden="true">⌄</i></summary>'+content+'</details>';
-  }
-  function renderMatches(now, results) {
-    if (!panel || !window.HOI_THAO_MATCHES) return;
-    const all = collectMatches();
-    const todayKey = now.toDateString();
-    const today = all.filter(m => m.start.toDateString() === todayKey).sort((a,b)=>a.start-b.start);
-    const groups = {live:[], upcoming:[], finished:[]};
-    today.forEach(m => groups[classify(m, now, results)].push(m));
-    const time = d => d.toLocaleTimeString("vi-VN",{hour:"2-digit",minute:"2-digit",hour12:false});
-    panel.innerHTML = '<div class="match-groups-title">LỊCH THI ĐẤU HÔM NAY · BẤM TÊN NHÓM ĐỂ MỞ / THU GỌN</div>' +
-      group('🟢 ĐANG DIỄN RA','live',groups.live,time) +
-      group('🟡 SẮP ĐẾN GIỜ','upcoming',groups.upcoming,time) +
-      group('⚪ ĐÃ KẾT THÚC','finished',groups.finished,time) +
-      '<a class="live-more" href="dia-diem-lich-thi-dau.html">Xem toàn bộ lịch và kết quả →</a>' +
-      '<p class="live-refresh">Trạng thái tự cập nhật theo giờ trên thiết bị; kết quả do Ban tổ chức cập nhật sẽ được ưu tiên.</p>';
-    panel.hidden = false;
-  }
-  function updateEventState(now) {
-    const beforeOpening = now.getTime() < target;
-    const finished = now.getTime() >= eventEnd;
-    if (section) {
-      section.classList.toggle("event-live", !beforeOpening && !finished);
-      section.classList.toggle("event-finished", finished);
-    }
-    if (opening) opening.hidden = false;
-    if (statusLabel) statusLabel.textContent = beforeOpening ? "SỰ KIỆN SẮP DIỄN RA" : (finished ? "HỘI THAO ĐÃ KẾT THÚC" : "HỘI THAO ĐANG DIỄN RA");
-    if (heading) heading.textContent = beforeOpening ? "Đếm ngược đến Hội thao" : (finished ? "Kết quả và lịch thi đấu" : "Các trận đấu hôm nay");
-    if (openingText && !beforeOpening) openingText.innerHTML = finished ? "Hội thao đã hoàn thành chương trình thi đấu tại Lạng Sơn." : "Khai mạc lúc <strong>07h30 ngày 16/10/2026</strong> · Hội thao đang diễn ra tại Lạng Sơn";
-  }
-  let lastResults = {};
-  const update = () => {
-    const now = new Date();
-    updateEventState(now);
-    if (now.getTime() < eventEnd) renderMatches(now, lastResults);
-  };
-  update();
-  getResultMap().then(results => { lastResults = results; update(); });
-  window.setInterval(update,30000);
-  window.setInterval(() => getResultMap().then(results => { lastResults = results; update(); }),60000);
+  function parseDate(dateText){const p=dateText.split("/");return new Date(Number(p[2]),Number(p[1])-1,Number(p[0]),0,0,0,0)}
+  function parseTime(timeText){const m=String(timeText).match(/(\d{1,2})h(\d{2})/i);if(m)return{h:Number(m[1]),m:Number(m[2])};const s=String(timeText).toLocaleLowerCase("vi");if(s.includes("sáng"))return{h:7,m:30};if(s.includes("chiều"))return{h:14,m:0};if(s.includes("tối"))return{h:19,m:30};return{h:7,m:30}}
+  function dateTime(dateText,timeText){const d=parseDate(dateText),t=parseTime(timeText);d.setHours(t.h,t.m,0,0);return d}
+  function esc(s){return String(s).replace(/[&<>\"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'\"':"&quot;","'":"&#39;"}[ch]))}
+  function collectMatches(){const data=window.HOI_THAO_MATCHES;if(!data)return[];const list=[];(data.football||[]).forEach((r,i)=>list.push({sport:"⚽ Bóng đá mini nam",date:r[0],time:r[1],id:String(i),group:"Bảng/vòng "+r[3],teams:r[4],venue:"Sân vận động Đông Kinh · Sân "+r[5],start:dateTime(r[0],r[1]),duration:50,type:"football"}));(data.volley||[]).forEach((r,i)=>list.push({sport:"🏐 Bóng chuyền hơi nữ",date:r[0],time:r[1],id:String(i),group:"Bảng/vòng "+r[3],teams:r[4],venue:r[5],start:dateTime(r[0],r[1]),duration:null,type:"volley"}));(data.pickle||[]).forEach((r,i)=>list.push({sport:"🏓 Pickleball",date:r[0],time:r[1],id:String(i),group:r[5]===" "?"":("Bảng/vòng "+r[5]),teams:r[6],venue:"Cụm sân Victory · "+r[2],start:dateTime(r[0],r[1]),duration:null,type:"pickle"}));return list}
+  function getResultMap(){return fetch("api/results.php",{cache:"no-store"}).then(r=>r.ok?r.json():Promise.reject()).then(data=>data&&data.ok?(data.results||{}):{}).catch(()=>({}))}
+  function classify(m,now,results){const saved=results[m.type+'-'+m.id];if(saved&&saved.status==='finished')return'finished';if(saved&&saved.status==='live')return'live';if(m.type==='football'){if(m.start>now)return'upcoming';if(now<new Date(m.start.getTime()+m.duration*60000))return'live';return'finished'}return m.start>now?'upcoming':'live'}
+  function card(m,status,time){const badge=status==='live'?'ĐANG DIỄN RA':status==='upcoming'?'SẮP ĐẾN GIỜ':'ĐÃ KẾT THÚC';return '<article class="live-card live-card-'+status+'"><div class="live-card-top"><span class="live-sport">'+esc(m.sport)+'</span><span class="live-time">'+esc(m.date)+' · '+esc(time(m.start))+'</span></div><div class="live-card-status">'+badge+'</div><strong class="live-teams">'+esc(m.teams)+'</strong><div class="live-detail">'+esc(m.group)+' · '+esc(m.venue)+'</div></article>'}
+  function group(title,status,items,time){const content=items.length?'<div class="live-list">'+items.map(m=>card(m,status,time)).join('')+'</div>':'<p class="live-empty">Chưa có trận '+(status==='live'?'đang diễn ra':status==='upcoming'?'sắp đến giờ':'đã kết thúc')+' theo lịch hiện tại.</p>';return '<details class="match-group match-group-'+status+'"><summary class="match-group-head"><span>'+title+'</span><b>'+items.length+'</b><i aria-hidden="true">⌄</i></summary>'+content+'</details>'}
+  function renderMatches(now,results){if(!panel||!window.HOI_THAO_MATCHES)return;const all=collectMatches(),today=all.filter(m=>m.start.toDateString()===now.toDateString()).sort((a,b)=>a.start-b.start),groups={live:[],upcoming:[],finished:[]};today.forEach(m=>groups[classify(m,now,results)].push(m));const time=d=>d.toLocaleTimeString("vi-VN",{hour:"2-digit",minute:"2-digit",hour12:false});panel.innerHTML='<div class="match-groups-title">LỊCH THI ĐẤU HÔM NAY · BẤM TÊN NHÓM ĐỂ MỞ / THU GỌN</div>'+group('🟢 ĐANG DIỄN RA','live',groups.live,time)+group('🟡 SẮP ĐẾN GIỜ','upcoming',groups.upcoming,time)+group('⚪ ĐÃ KẾT THÚC','finished',groups.finished,time)+'<a class="live-more" href="dia-diem-lich-thi-dau.html">Xem toàn bộ lịch và kết quả →</a><p class="live-refresh">Trạng thái tự cập nhật theo giờ trên thiết bị; kết quả do Ban tổ chức cập nhật sẽ được ưu tiên.</p>';panel.hidden=false}
+  function updateEventState(now){const beforeOpening=now.getTime()<target,finished=now.getTime()>=eventEnd;if(section){section.classList.toggle("event-live",!beforeOpening&&!finished);section.classList.toggle("event-finished",finished)}if(opening)opening.hidden=false;if(statusLabel)statusLabel.textContent=beforeOpening?"SỰ KIỆN SẮP DIỄN RA":(finished?"HỘI THAO ĐÃ KẾT THÚC":"HỘI THAO ĐANG DIỄN RA");if(heading)heading.textContent=beforeOpening?"Đếm ngược đến Hội thao":(finished?"Kết quả và lịch thi đấu":"Các trận đấu hôm nay");if(openingText&&!beforeOpening)openingText.innerHTML=finished?"Hội thao đã hoàn thành chương trình thi đấu tại Lạng Sơn.":"Khai mạc lúc <strong>07h30 ngày 16/10/2026</strong> · Hội thao đang diễn ra tại Lạng Sơn"}
+  let lastResults={};const update=()=>{const now=new Date();updateEventState(now);if(now.getTime()<eventEnd)renderMatches(now,lastResults)};update();getResultMap().then(results=>{lastResults=results;update()});window.setInterval(update,30000);window.setInterval(()=>getResultMap().then(results=>{lastResults=results;update()}),60000);
 })();
