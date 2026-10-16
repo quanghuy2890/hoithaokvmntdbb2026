@@ -7,61 +7,37 @@
   <meta name="description" content="Website chính thức cung cấp thông tin Hội thao Agribank lần thứ X năm 2026, khu vực Miền núi và Trung du Bắc Bộ tại Lạng Sơn.">
   <link rel="canonical" href="http://hoithaokvmntdbb2026.fun/">
   <title>Hội thao Agribank Lạng Sơn lần thứ X năm 2026</title>
-  <link rel="stylesheet" href="assets/style.css?v=live-match-2">
+  <link rel="stylesheet" href="assets/style.css?v=live-match-5">
   <style>
     .welcome-ticker{position:relative;overflow:hidden;display:flex;align-items:center;gap:clamp(12px,2vw,26px);min-height:74px;padding:14px clamp(16px,4vw,52px);background:linear-gradient(100deg,#064d34 0%,#087849 48%,#0b6544 100%);border-top:3px solid #e5c36b;border-bottom:3px solid #e5c36b;box-shadow:0 5px 16px #063d2a24;color:#fff}
     .welcome-track{display:flex;align-items:center;gap:28px;min-width:0;white-space:nowrap;animation:welcome-scroll 32s linear infinite;font-size:clamp(15px,1.8vw,21px);font-weight:900;letter-spacing:.35px;text-shadow:0 2px 3px #003c26}
-    .welcome-track span:nth-child(even){color:#ffe7a2}
-    .welcome-ticker:hover .welcome-track{animation-play-state:paused}
+    .welcome-track span:nth-child(even){color:#ffe7a2}.welcome-ticker:hover .welcome-track{animation-play-state:paused}
     @keyframes welcome-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
     @media(max-width:640px){.welcome-ticker{align-items:flex-start;flex-direction:column;gap:7px;padding:12px 16px}.welcome-track{font-size:15px;animation-duration:28s}}
     @media(prefers-reduced-motion:reduce){.welcome-track{animation:none;white-space:normal;flex-wrap:wrap}}
-    .event-live .section-kicker{color:#087849}
-    .event-live .section-kicker .kicker-icon{color:#0b9a5b}
-    .event-live #countdown-heading{margin-bottom:12px}
-    .event-live .opening{margin-top:8px}
-    .event-live .live-match-panel{margin-top:20px}
-    .event-finished .section-kicker{color:#68756f}
+    .event-live .section-kicker{color:#087849}.event-live .section-kicker .kicker-icon{color:#0b9a5b}.event-live #countdown-heading{margin-bottom:12px}.event-live .opening{margin-top:8px}.event-live .live-match-panel{margin-top:20px}.event-finished .section-kicker{color:#68756f}
   </style>
 </head>
 <body>
   <main id="trang-chu">
     <section class="hero" aria-label="Ảnh bìa Hội thao Agribank Lạng Sơn">
-      <img class="hero-banner" src="assets/banner-hoi-thao.png"
-           alt="Hội thao Agribank lần thứ X năm 2026 với ba môn thể thao và danh lam Lạng Sơn">
+      <img class="hero-banner" src="assets/banner-hoi-thao.png" alt="Hội thao Agribank lần thứ X năm 2026 với ba môn thể thao và danh lam Lạng Sơn">
     </section>
-
     <section class="welcome-ticker" aria-label="Thông điệp chào mừng Hội thao">
       <div class="welcome-track" role="marquee" aria-label="Chào mừng các đoàn vận động viên">
-        <span>CHÀO MỪNG CÁC ĐOÀN VẬN ĐỘNG VIÊN CÁC TỈNH VỀ THAM DỰ HỘI THAO AGRIBANK LẦN THỨ X NĂM 2026</span>
-        <span aria-hidden="true">✦</span>
-        <span>ĐOÀN KẾT · GIAO LƯU · TRUNG THỰC · CAO THƯỢNG · CHINH PHỤC THÀNH CÔNG</span>
-        <span aria-hidden="true">✦</span>
+        <span>CHÀO MỪNG CÁC ĐOÀN VẬN ĐỘNG VIÊN CÁC TỈNH VỀ THAM DỰ HỘI THAO AGRIBANK LẦN THỨ X NĂM 2026</span><span aria-hidden="true">✦</span><span>ĐOÀN KẾT · GIAO LƯU · TRUNG THỰC · CAO THƯỢNG · CHINH PHỤC THÀNH CÔNG</span><span aria-hidden="true">✦</span>
       </div>
     </section>
-
     <section class="countdown-section" aria-labelledby="countdown-heading">
       <div class="countdown-wrap">
-        <div class="section-kicker"><span class="kicker-icon" aria-hidden="true">◷</span> <span id="event-status-label">SỰ KIỆN SẮP DIỄN RA</span></div>
-        <h1 id="countdown-heading">Đếm ngược đến Hội thao</h1>
-        <div class="countdown" data-target="2026-10-16T07:30:00+07:00" aria-live="off">
-          <div class="time-box"><strong id="days">--</strong><span>Ngày</span></div>
-          <div class="time-box"><strong id="hours">--</strong><span>Giờ</span></div>
-          <div class="time-box"><strong id="minutes">--</strong><span>Phút</span></div>
-          <div class="time-box"><strong id="seconds">--</strong><span>Giây</span></div>
-        </div>
-        <p class="opening"><span class="opening-icon" aria-hidden="true">◷</span> <span id="opening-text">Khai mạc lúc <strong>07h30 ngày 16/10/2026</strong> tại Lạng Sơn</span></p>
-        <div id="live-match-panel" class="live-match-panel" hidden aria-live="polite"></div>
+        <div class="section-kicker"><span class="kicker-icon" aria-hidden="true">◷</span> <span id="event-status-label">HỘI THAO ĐANG DIỄN RA</span></div>
+        <h1 id="countdown-heading">Các trận đấu hôm nay</h1>
+        <p class="opening"><span class="opening-icon" aria-hidden="true">◷</span> Khai mạc lúc <strong>07h30 ngày 16/10/2026</strong> · Hội thao đang diễn ra tại Lạng Sơn</p>
+        <div id="live-match-panel" class="live-match-panel" aria-live="polite"></div>
       </div>
     </section>
-
     <section class="content-section" aria-labelledby="quick-links-heading">
-      <div class="section-heading">
-        <p class="section-kicker"><span class="kicker-icon" aria-hidden="true">✦</span> THÔNG TIN CHÍNH THỨC</p>
-        <h2 id="quick-links-heading">Khám phá Hội thao</h2>
-        <p>Thông tin cần thiết dành cho các đoàn và vận động viên</p>
-      </div>
-
+      <div class="section-heading"><p class="section-kicker"><span class="kicker-icon" aria-hidden="true">✦</span> THÔNG TIN CHÍNH THỨC</p><h2 id="quick-links-heading">Khám phá Hội thao</h2><p>Thông tin cần thiết dành cho các đoàn và vận động viên</p></div>
       <div class="quick-links">
         <a class="info-card red" id="ban-to-chuc" href="ban-to-chuc.html"><span class="card-icon" aria-hidden="true">♟</span><span class="card-copy"><strong>Ban tổ chức</strong><small>Thành viên, nhiệm vụ và phân công</small></span><span class="card-arrow" aria-hidden="true">›</span></a>
         <a class="info-card green" id="dia-diem" href="dia-diem-lich-thi-dau.html"><span class="card-icon" aria-hidden="true">📅</span><span class="card-copy"><strong>Địa điểm &amp; lịch thi đấu</strong><small>Địa điểm thi đấu và lịch các môn</small></span><span class="card-arrow" aria-hidden="true">›</span></a>
@@ -72,37 +48,12 @@
       </div>
     </section>
   </main>
-
   <footer class="site-footer">
-    <div class="footer-message">
-      <div class="footer-copy">
-        <p class="footer-kicker">THÔNG TIN HỘI THAO</p>
-        <h2>Hội thao Agribank lần thứ X năm 2026</h2>
-        <p class="footer-region">Khu vực Miền núi và Trung du Bắc Bộ</p>
-        <strong class="footer-branch">Agribank Chi nhánh Lạng Sơn</strong>
-        <p class="footer-wish">Kính chúc Hội thao thành công tốt đẹp!</p>
-      </div>
-      <a class="footer-qr" href="http://hoithaokvmntdbb2026.fun/" target="_blank" rel="noopener noreferrer" aria-label="Quét mã QR để truy cập website Hội thao">
-        <img src="assets/qr-hoi-thao-agribank-2026.png?v=3" alt="Mã QR Hội thao Agribank Lạng Sơn 2026, quét để truy cập website" width="180" height="180">
-        <strong>QUÉT MÃ QR</strong>
-        <span>Truy cập website Hội thao</span>
-      </a>
-    </div>
+    <div class="footer-message"><div class="footer-copy"><p class="footer-kicker">THÔNG TIN HỘI THAO</p><h2>Hội thao Agribank lần thứ X năm 2026</h2><p class="footer-region">Khu vực Miền núi và Trung du Bắc Bộ</p><strong class="footer-branch">Agribank Chi nhánh Lạng Sơn</strong><p class="footer-wish">Kính chúc Hội thao thành công tốt đẹp!</p></div><a class="footer-qr" href="http://hoithaokvmntdbb2026.fun/" target="_blank" rel="noopener noreferrer" aria-label="Quét mã QR để truy cập website Hội thao"><img src="assets/qr-hoi-thao-agribank-2026.png?v=3" alt="Mã QR Hội thao Agribank Lạng Sơn 2026, quét để truy cập website" width="180" height="180"><strong>QUÉT MÃ QR</strong><span>Truy cập website Hội thao</span></a></div>
     <div style="max-width:1200px;margin:0 auto;padding:0 20px 18px;text-align:center"></div>
     <div id="visitor-counter" style="text-align:center;padding:0 12px 12px;color:#d7e8df;font:12px/1.4 Arial,sans-serif;opacity:.9" aria-live="polite">Lượt truy cập: đang cập nhật…</div>
   </footer>
-
-  <script>
-    fetch('api/visitors.php', {cache:'no-store', credentials:'same-origin'})
-      .then(r => r.ok ? r.json() : Promise.reject())
-      .then(data => {
-        const el = document.getElementById('visitor-counter');
-        if (el && data.ok && Number.isFinite(Number(data.count))) el.textContent = 'Lượt truy cập: ' + Number(data.count).toLocaleString('vi-VN');
-        else if (el) el.textContent = '';
-      })
-      .catch(() => { const el = document.getElementById('visitor-counter'); if (el) el.textContent = ''; });
-  </script>
-  <script src="assets/matches.js?v=live-match-4" defer></script>
-  <script src="assets/app.js?v=live-match-4" defer></script>
+  <script>fetch('api/visitors.php',{cache:'no-store',credentials:'same-origin'}).then(r=>r.ok?r.json():Promise.reject()).then(data=>{const el=document.getElementById('visitor-counter');if(el&&data.ok&&Number.isFinite(Number(data.count)))el.textContent='Lượt truy cập: '+Number(data.count).toLocaleString('vi-VN');else if(el)el.textContent='';}).catch(()=>{const el=document.getElementById('visitor-counter');if(el)el.textContent='';});</script>
+  <script src="assets/matches.js?v=live-match-5" defer></script><script src="assets/app.js?v=live-match-5" defer></script>
 </body>
 </html>
