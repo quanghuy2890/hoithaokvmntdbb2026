@@ -1,45 +1,35 @@
-/* Pickleball data + lookup UI.
+/* Self-contained Pickleball schedule + branch lookup.
    Data source: PHỤ LỤC 03 - Môn Pickleball đã sửa chiều 10.10.
-   Existing rows are never reordered or overwritten; official additions are appended only when their date/court/match key is absent. */
+   The official additions are embedded locally so the site no longer depends on raw.githubusercontent.com. */
 (function(){
   "use strict";
   const M=window.HOI_THAO_MATCHES||{};
-  if(!Array.isArray(M.pickle)) return;
-  const extra=PLACEHOLDER;
-  extra.forEach(r=>{ if(typeof r[6] === "string") r[6]=r[6].replace(/\s+–\s+–\s+/g," – ").replace(/\s+–\s+-\s+/g," – "); });
-  const key=r=>r.slice(0,4).join("|");
-  const seen=new Set(M.pickle.map(key));
-  extra.forEach(r=>{ if(!seen.has(key(r))){ M.pickle.push(r); seen.add(key(r)); } });
-
+  const encoded="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";
+  const ready=(async()=>{
+    const bin=atob(encoded);
+    const bytes=new Uint8Array(bin.length);
+    for(let i=0;i<bin.length;i++) bytes[i]=bin.charCodeAt(i);
+    if(typeof DecompressionStream!=="function") throw new Error("Trình duyệt không hỗ trợ giải nén dữ liệu lịch Pickleball.");
+    const stream=new Blob([bytes]).stream().pipeThrough(new DecompressionStream("gzip"));
+    const extra=JSON.parse(await new Response(stream).text());
+    if(!Array.isArray(M.pickle)) M.pickle=[];
+    const key=r=>r.slice(0,4).join("|");
+    const seen=new Set(M.pickle.map(key));
+    extra.forEach(r=>{ if(typeof r[6]==="string") r[6]=r[6].replace(/\s+–\s+–\s+/g," – ").replace(/\s+–\s+-\s+/g," – "); if(!seen.has(key(r))){M.pickle.push(r);seen.add(key(r));} });
+    return M;
+  })();
+  window.HOI_THAO_MATCHES_READY=ready;
   const panel=document.querySelector(".panel");
   if(!panel) return;
   const esc=v=>String(v??"").replace(/[&<>\"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'\"':"&quot;","'":"&#39;"}[c]));
-  const normalize=v=>String(v||"").toLocaleLowerCase("vi").normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/đ/g,"d").replace(/\s+/g," ").trim();
+  const normalize=v=>String(v||"").toLocaleLowerCase("vi").normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/\s+/g," ").trim();
   const branches=["Bắc Kạn","Bắc Yên Bái","Cao Bằng","Điện Biên","Hà Giang","Hòa Bình","Lai Châu","Lạng Sơn","Lào Cai","Lào Cai II","Nam Thái Nguyên","Phú Thọ","Phú Thọ II","Sơn La","Sơn La II","Thái Nguyên","Tuyên Quang","Vĩnh Phúc","Vĩnh Phúc II","Yên Bái"];
   const names={football:"Bóng đá mini nam",volley:"Bóng chuyền hơi nữ",pickle:"Pickleball"};
-  panel.innerHTML='<h2>Tra cứu lịch và kết quả theo Agribank tỉnh/chi nhánh</h2>' +
-    '<p class="meta">Chọn Agribank tỉnh/chi nhánh và môn thi đấu để xem các trận có liên quan, gồm ngày, giờ/buổi, bảng/vòng, đối thủ, địa điểm và kết quả.</p>' +
-    '<div class="controls"><select id="branchFilter" aria-label="Chọn Agribank tỉnh hoặc chi nhánh"><option value="">— Chọn Agribank tỉnh/chi nhánh —</option>'+branches.map(b=>'<option value="'+esc(b)+'">Agribank CN '+esc(b)+'</option>').join("")+"</select>" +
-    '<select id="sportFilter" aria-label="Chọn môn thi đấu"><option value="">Tất cả các môn</option><option value="football">Bóng đá mini nam</option><option value="volley">Bóng chuyền hơi nữ</option><option value="pickle">Pickleball</option></select>' +
-    '<button id="searchBtn" type="button">Tra cứu</button></div>' +
-    '<div id="searchResults" aria-live="polite"><div class="empty">Chọn Agribank tỉnh/chi nhánh rồi bấm “Tra cứu”.</div></div>';
-
-  let saved={};
-  fetch("api/results.php",{cache:"no-store"}).then(r=>r.ok?r.json():Promise.reject()).then(j=>{if(j&&j.ok)saved=j.results||{};}).catch(()=>{});
-  function resultText(id,index){ const r=saved[id+"-"+index]; if(!r||!r.score) return "Chưa có kết quả"; return "Kết quả: "+r.score+(r.status==="live"?" · Đang thi đấu":r.status==="finished"?" · Kết thúc":""); }
-  function branchMatches(text,branch){
-    const t=normalize(text), b=normalize(branch); if(!b) return false;
-    const escaped=b.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
-    return new RegExp("(?:^|[^a-z0-9])"+escaped+"(?:$|[^a-z0-9])").test(t);
-  }
-  function search(){
-    const branch=document.getElementById("branchFilter").value.trim(), sport=document.getElementById("sportFilter").value, out=document.getElementById("searchResults");
-    if(!branch){out.innerHTML='<div class="empty">Chọn Agribank tỉnh/chi nhánh trong danh sách rồi bấm “Tra cứu”.</div>';return;}
-    const data=window.HOI_THAO_MATCHES||{}, sets=[[names.football,data.football||[],"football"],[names.volley,data.volley||[],"volley"],[names.pickle,data.pickle||[],"pickle"]], found=[];
-    sets.forEach(([name,rows,id])=>{if(sport&&sport!==id)return; rows.forEach((r,i)=>{if(branchMatches(r.join(" "),branch)) found.push({name,r,id,i});});});
-    if(!found.length){out.innerHTML='<div class="empty">Chưa tìm thấy trận phù hợp của Agribank CN '+esc(branch)+' trong lịch đã nhập.</div>';return;}
-    out.innerHTML='<p><strong>Agribank CN '+esc(branch)+' — tìm thấy '+found.length+' trận</strong></p>'+found.map(x=>{const {name,r,id,i}=x; const match=id==="football"?"Trận "+r[2]+" · Bảng/vòng "+r[3]:id==="volley"?"Trận "+r[2]+" · Bảng/vòng "+r[3]:"Trận "+r[3]+" · Bảng/vòng "+r[5]; const teams=id==="football"?r[4]:id==="volley"?r[4]:r[6]; const detail=id==="football"?"Giờ "+r[1]+" · Sân "+r[5]:id==="volley"?"Buổi "+r[1]+" · "+r[5]:"Buổi "+r[1]+" · "+r[2]+" · "+r[4]; return '<article class="result-card"><span class="tag">'+esc(name)+'</span> <span class="tag">'+esc(r[0])+'</span><br><strong>'+esc(match)+'</strong><p>'+esc(teams)+'</p><span class="small">'+esc(detail)+' · '+esc(resultText(id,i))+'</span></article>';}).join("");
-  }
+  panel.innerHTML='<h2>Tra cứu lịch và kết quả theo Agribank tỉnh/chi nhánh</h2>'+'<p class="meta">Chọn Agribank tỉnh/chi nhánh và môn thi đấu để xem các trận có liên quan, gồm ngày, giờ/buổi, bảng/vòng, đối thủ, địa điểm và kết quả.</p>'+'<div class="controls"><select id="branchFilter" aria-label="Chọn Agribank tỉnh hoặc chi nhánh"><option value="">— Chọn Agribank tỉnh/chi nhánh —</option>'+branches.map(b=>'<option value="'+esc(b)+'">Agribank CN '+esc(b)+'</option>').join("")+"</select>"+'<select id="sportFilter" aria-label="Chọn môn thi đấu"><option value="">Tất cả các môn</option><option value="football">Bóng đá mini nam</option><option value="volley">Bóng chuyền hơi nữ</option><option value="pickle">Pickleball</option></select>'+'<button id="searchBtn" type="button">Tra cứu</button></div>'+'<div id="searchResults" aria-live="polite"><div class="empty">Chọn Agribank tỉnh/chi nhánh rồi bấm “Tra cứu”.</div></div>';
+  let saved={}; fetch("api/results.php",{cache:"no-store"}).then(r=>r.ok?r.json():Promise.reject()).then(j=>{if(j&&j.ok)saved=j.results||{};}).catch(()=>{});
+  function resultText(id,index){const r=saved[id+"-"+index];if(!r||!r.score)return "Chưa có kết quả";return "Kết quả: "+r.score+(r.status==="live"?" · Đang thi đấu":r.status==="finished"?" · Kết thúc":"");}
+  function branchMatches(text,branch){const t=normalize(text),b=normalize(branch);if(!b)return false;const escaped=b.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");return new RegExp("(?:^|[^a-z0-9])"+escaped+"(?:$|[^a-z0-9])").test(t);}
+  async function search(){const out=document.getElementById("searchResults");out.innerHTML='<div class="empty">Đang tải đầy đủ lịch thi đấu…</div>';try{await ready;}catch(e){out.innerHTML='<div class="empty">Không tải được đầy đủ dữ liệu lịch Pickleball.</div>';return;}const branch=document.getElementById("branchFilter").value.trim(),sport=document.getElementById("sportFilter").value;if(!branch){out.innerHTML='<div class="empty">Chọn Agribank tỉnh/chi nhánh trong danh sách rồi bấm “Tra cứu”.</div>';return;}const data=window.HOI_THAO_MATCHES||{},sets=[[names.football,data.football||[],"football"],[names.volley,data.volley||[],"volley"],[names.pickle,data.pickle||[],"pickle"]],found=[];sets.forEach(([name,rows,id])=>{if(sport&&sport!==id)return;rows.forEach((r,i)=>{if(branchMatches(r.join(" "),branch))found.push({name,r,id,i});});});if(!found.length){out.innerHTML='<div class="empty">Chưa tìm thấy trận phù hợp của Agribank CN '+esc(branch)+' trong lịch đã nhập.</div>';return;}out.innerHTML='<p><strong>Agribank CN '+esc(branch)+' — tìm thấy '+found.length+' trận</strong></p>'+found.map(x=>{const {name,r,id,i}=x;const match=id==="football"?"Trận "+r[2]+" · Bảng/vòng "+r[3]:id==="volley"?"Trận "+r[2]+" · Bảng/vòng "+r[3]:"Trận "+r[3]+" · Bảng/vòng "+r[5];const teams=id==="football"?r[4]:id==="volley"?r[4]:r[6];const detail=id==="football"?"Giờ "+r[1]+" · Sân "+r[5]:id==="volley"?"Buổi "+r[1]+" · "+r[5]:"Buổi "+r[1]+" · "+r[2]+" · "+r[4];return '<article class="result-card"><span class="tag">'+esc(name)+'</span> <span class="tag">'+esc(r[0])+'</span><br><strong>'+esc(match)+'</strong><p>'+esc(teams)+'</p><span class="small">'+esc(detail)+' · '+esc(resultText(id,i))+'</span></article>';}).join("");}
   document.getElementById("branchFilter").addEventListener("change",()=>{document.getElementById("searchResults").innerHTML='<div class="empty">Bấm “Tra cứu” để xem lịch của chi nhánh đã chọn.</div>';});
-  document.getElementById("searchBtn").addEventListener("click",()=>search());
+  document.getElementById("searchBtn").addEventListener("click",search);
 })();
