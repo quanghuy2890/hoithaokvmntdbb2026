@@ -18,6 +18,7 @@
     .event-live .section-kicker{color:#087849}.event-live .section-kicker .kicker-icon{color:#0b9a5b}.event-live #countdown-heading{margin-bottom:12px}.event-live .opening{margin-top:8px}.event-live .live-match-panel{margin-top:20px}.event-finished .section-kicker{color:#68756f}
     .match-groups-title{font-size:12px;font-weight:800;letter-spacing:.12em;color:#b78b2b;margin:18px 0 10px;text-transform:uppercase}
     .match-group{margin:0 0 18px}.match-group-head{display:flex;justify-content:space-between;align-items:center;margin:0 0 8px;font-size:13px;font-weight:800;letter-spacing:.05em}.match-group-head b{min-width:24px;padding:3px 8px;border-radius:999px;background:#f5f0e5;color:#8a6a27;text-align:center;font-size:11px}.match-group-live .match-group-head{color:#087849}.match-group-upcoming .match-group-head{color:#9a6b08}.match-group-finished .match-group-head{color:#6f7773}.live-card{position:relative}.live-card-status{display:inline-block;margin:5px 0 4px;padding:3px 8px;border-radius:999px;font-size:10px;font-weight:800;letter-spacing:.04em}.live-card-live .live-card-status{background:#e5f6ed;color:#087849}.live-card-upcoming .live-card-status{background:#fff1cf;color:#9a6b08}.live-card-finished{opacity:.72}.live-card-finished .live-card-status{background:#edf0ee;color:#68716d}
+    .visitor-counter{display:block;text-align:center;padding:2px 12px 14px;color:#ffffff;font:700 12px/1.4 Arial,sans-serif;letter-spacing:.2px;text-shadow:0 1px 2px #003c26;opacity:1}
   </style>
 </head>
 <body>
@@ -53,7 +54,7 @@
   <footer class="site-footer">
     <div class="footer-message"><div class="footer-copy"><p class="footer-kicker">THÔNG TIN HỘI THAO</p><h2>Hội thao Agribank lần thứ X năm 2026</h2><p class="footer-region">Khu vực Miền núi và Trung du Bắc Bộ</p><strong class="footer-branch">Agribank Chi nhánh Lạng Sơn</strong><p class="footer-wish">Kính chúc Hội thao thành công tốt đẹp!</p></div><a class="footer-qr" href="http://hoithaokvmntdbb2026.fun/" target="_blank" rel="noopener noreferrer" aria-label="Quét mã QR để truy cập website Hội thao"><img src="assets/qr-hoi-thao-agribank-2026.png?v=3" alt="Mã QR Hội thao Agribank Lạng Sơn 2026, quét để truy cập website" width="180" height="180"><strong>QUÉT MÃ QR</strong><span>Truy cập website Hội thao</span></a></div>
     <div style="max-width:1200px;margin:0 auto;padding:0 20px 18px;text-align:center"></div>
-    <div id="visitor-counter" style="text-align:center;padding:0 12px 12px;color:#d7e8df;font:12px/1.4 Arial,sans-serif;opacity:.9" aria-live="polite">Lượt truy cập: đang cập nhật…</div>
+    <div id="visitor-counter" class="visitor-counter" aria-live="polite">Lượt truy cập: đang cập nhật…</div>
   </footer>
   <script>fetch('api/visitors.php',{cache:'no-store',credentials:'same-origin'}).then(r=>r.ok?r.json():Promise.reject()).then(data=>{const el=document.getElementById('visitor-counter');if(el&&data.ok&&Number.isFinite(Number(data.count)))el.textContent='Lượt truy cập: '+Number(data.count).toLocaleString('vi-VN');else if(el)el.textContent='';}).catch(()=>{const el=document.getElementById('visitor-counter');if(el)el.textContent='';});</script>
   <script src="assets/matches.js?v=live-match-6" defer></script><script src="assets/app.js?v=live-match-6" defer></script>
