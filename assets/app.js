@@ -55,7 +55,9 @@
     return '<article class="live-card live-card-'+status+'"><div class="live-card-top"><span class="live-sport">'+esc(m.sport)+'</span><span class="live-time">'+esc(m.date)+' · '+esc(time(m.start))+'</span></div><div class="live-card-status">'+badge+'</div><strong class="live-teams">'+esc(m.teams)+'</strong><div class="live-detail">'+esc(m.group)+' · '+esc(m.venue)+'</div></article>';
   }
   function group(title, status, items, time) {
-    return '<section class="match-group match-group-'+status+'"><div class="match-group-head"><span>'+title+'</span><b>'+items.length+'</b></div>' + (items.length ? '<div class="live-list">'+items.map(m=>card(m,status,time)).join("")+'</div>' : '<p class="live-empty">Chưa có trận '+(status==='live'?'đang diễn ra':status==='upcoming'?'sắp đến giờ':'đã kết thúc')+' theo lịch hiện tại.</p>') + '</section>';
+    const open = status !== "finished" ? " open" : "";
+    const content = items.length ? '<div class="live-list">'+items.map(m=>card(m,status,time)).join("")+'</div>' : '<p class="live-empty">Chưa có trận '+(status==='live'?'đang diễn ra':status==='upcoming'?'sắp đến giờ':'đã kết thúc')+' theo lịch hiện tại.</p>';
+    return '<details class="match-group match-group-'+status+'"'+open+'><summary class="match-group-head"><span>'+title+'</span><b>'+items.length+'</b><i aria-hidden="true">⌄</i></summary>'+content+'</details>';
   }
   function renderMatches(now, results) {
     if (!panel || !window.HOI_THAO_MATCHES) return;
@@ -65,7 +67,7 @@
     const groups = {live:[], upcoming:[], finished:[]};
     today.forEach(m => groups[classify(m, now, results)].push(m));
     const time = d => d.toLocaleTimeString("vi-VN",{hour:"2-digit",minute:"2-digit",hour12:false});
-    panel.innerHTML = '<div class="match-groups-title">LỊCH THI ĐẤU HÔM NAY</div>' +
+    panel.innerHTML = '<div class="match-groups-title">LỊCH THI ĐẤU HÔM NAY · BẤM TÊN NHÓM ĐỂ MỞ / THU GỌN</div>' +
       group('🟢 ĐANG DIỄN RA','live',groups.live,time) +
       group('🟡 SẮP ĐẾN GIỜ','upcoming',groups.upcoming,time) +
       group('⚪ ĐÃ KẾT THÚC','finished',groups.finished,time) +
