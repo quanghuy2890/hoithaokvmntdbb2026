@@ -22,7 +22,8 @@ if (!isset($albums[$album])) {
 
 $baseDir = dirname(__DIR__) . '/assets/gallery/' . $album;
 $baseUrl = '../assets/gallery/' . rawurlencode($album) . '/';
-$allowed = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
+// Hỗ trợ các định dạng ảnh phổ biến, bao gồm JFIF/JPE thường gặp từ điện thoại.
+$allowed = ['jpg', 'jpeg', 'jpe', 'jfif', 'png', 'webp', 'gif'];
 $images = [];
 
 if (is_dir($baseDir)) {
