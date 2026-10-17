@@ -1,5 +1,5 @@
 <?php
-// ADMIN-V14: result entry + editable teams for provisional knockout fixtures.
+// ADMIN-V15: result entry + editable teams for provisional/draw knockout fixtures.
 header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
 header('Pragma: no-cache');
 header('Expires: 0');
@@ -13,7 +13,7 @@ if (empty($_SESSION['sports_admin'])) { header('Location: login.php'); exit; }
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta http-equiv="Cache-Control" content="no-store">
-<title>ADMIN-V14 · Nhập kết quả Hội thao Agribank 2026</title>
+<title>ADMIN-V15 · Nhập kết quả Hội thao Agribank 2026</title>
 <style>
 :root{--g:#087849;--gd:#075b3b;--ink:#173b2d;--line:#dbe5df;--bg:#f3f7f4;--gold:#e5c36b}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);font:16px Arial,sans-serif;color:var(--ink)}
@@ -31,19 +31,19 @@ main{max-width:1200px;margin:22px auto;padding:0 14px}.panel{background:#fff;bor
 </style>
 </head>
 <body data-admin="1">
-<header><h1>Nhập và cập nhật kết quả thi đấu</h1><p>Hội thao Agribank lần thứ X · Khu vực Miền núi và Trung du Bắc Bộ · Năm 2026</p><span class="badge">ADMIN-V14 · NHẬP ĐỘI THAY THẾ CHO BK/TK/CK</span><div class="actions"><a href="../dia-diem-lich-thi-dau.html" target="_blank">Xem lịch công khai ↗</a><a href="logout.php">Đăng xuất</a></div></header>
+<header><h1>Nhập và cập nhật kết quả thi đấu</h1><p>Hội thao Agribank lần thứ X · Khu vực Miền núi và Trung du Bắc Bộ · Năm 2026</p><span class="badge">ADMIN-V15 · NHẬP ĐỘI THAY THẾ CHO TK/BK/CK/BỐC THĂM</span><div class="actions"><a href="../dia-diem-lich-thi-dau.html" target="_blank">Xem lịch công khai ↗</a><a href="logout.php">Đăng xuất</a></div></header>
 <main>
-<section class="panel"><div class="filters"><select id="sport"><option value="">Tất cả môn</option><option value="football">Bóng đá mini nam</option><option value="volley">Bóng chuyền hơi nữ</option><option value="pickle">Pickleball</option></select><input id="search" placeholder="Tìm đội/chi nhánh, mã trận, ngày…"></div><div id="stats" class="stats">Đang tải danh sách trận…</div><div id="message" class="message" role="status"></div><div class="help"><strong>Cách nhập:</strong> tỷ số ở ô bên phải. Với trận đang ghi <b>Nhất A / Nhì D / Thắng TK1 / BK1 / CK</b>, thêm <b>tên hai đội thực tế</b> vào ô “Đội thi đấu thực tế”, rồi bấm <b>Lưu</b>. Tên đội này được lưu trong cơ sở dữ liệu và ưu tiên hiển thị trên trang công khai. Muốn xóa kết quả và tên đội thay thế: để trống tỷ số + tên đội, chọn “Chưa cập nhật”, rồi Lưu.</div></section>
+<section class="panel"><div class="filters"><select id="sport"><option value="">Tất cả môn</option><option value="football">Bóng đá mini nam</option><option value="volley">Bóng chuyền hơi nữ</option><option value="pickle">Pickleball</option></select><input id="search" placeholder="Tìm đội/chi nhánh, mã trận, ngày…"></div><div id="stats" class="stats">Đang tải danh sách trận…</div><div id="message" class="message" role="status"></div><div class="help"><strong>Cách nhập:</strong> tỷ số ở ô bên phải. Với trận đang ghi <b>Nhất A / Nhì D / Thắng TK1 / BK1 / CK / Bốc thăm</b>, thêm <b>tên hai đội thực tế</b> vào ô “Đội thi đấu thực tế”, rồi bấm <b>Lưu</b>. Tên đội này được lưu trong cơ sở dữ liệu và ưu tiên hiển thị trên trang công khai. Muốn xóa kết quả và tên đội thay thế: để trống tỷ số + tên đội, chọn “Chưa cập nhật”, rồi Lưu.</div></section>
 <section class="panel"><div id="matches"></div></section>
 </main>
-<script src="../assets/matches.js?v=admin-v14"></script><script src="../assets/matches-extra.js?v=admin-v14"></script>
+<script src="../assets/matches.js?v=admin-v15"></script><script src="../assets/matches-extra.js?v=admin-v15"></script>
 <script>
 const datasets=window.HOI_THAO_MATCHES||{football:[],volley:[],pickle:[]};
 const names={football:'Bóng đá mini nam',volley:'Bóng chuyền hơi nữ',pickle:'Pickleball'};let saved={};
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function fixture(sport,row,i){const teams=sport==='pickle'?row[6]:row[4];const meta=sport==='football'?'Giờ '+row[1]+' · Sân '+row[5]+' · Bảng/vòng '+row[3]:sport==='volley'?'Buổi '+row[1]+' · '+row[5]+' · Bảng/vòng '+row[3]:'Buổi '+row[1]+' · '+row[2]+' · '+row[4]+' · Bảng/vòng '+row[5];return{key:sport+'-'+i,sport,row,date:row[0],teams,meta,idx:i}}
 function allFixtures(){return Object.keys(datasets).flatMap(s=>datasets[s].map((r,i)=>fixture(s,r,i)))}
-function provisional(text){return /(?:Nhất|Nhì|Thắng|TK[1-4]|BK[1-2]|CK|tứ kết|bán kết|chưa xác định)/i.test(String(text||''))}
+function provisional(text){return /(?:Nhất|Nhì|Thắng|TK[1-4]|BK[1-2]|CK|Bốc\s*thăm|tứ kết|bán kết|chưa xác định)/i.test(String(text||''))}
 function render(){const sport=document.getElementById('sport').value,q=document.getElementById('search').value.trim().toLocaleLowerCase('vi');const all=allFixtures().filter(f=>(!sport||f.sport===sport)&&(!q||[f.key,names[f.sport],f.date,f.teams,f.meta,(saved[f.key]||{}).teams_override||''].join(' ').toLocaleLowerCase('vi').includes(q)));document.getElementById('stats').textContent='Hiển thị '+all.length+' trận · Đã có kết quả '+all.filter(f=>saved[f.key]&&saved[f.key].score).length+' trận';document.getElementById('matches').innerHTML=all.map(f=>{const r=saved[f.key]||{}, override=r.teams_override||'', canEdit=provisional(f.teams)||!!override;return '<div class="match"><div class="fixture"><strong>'+esc(names[f.sport])+' · '+esc(f.key)+'</strong><div>'+esc(override||f.teams)+'</div><div class="muted">'+esc(f.date+' · '+f.meta)+'</div></div><input aria-label="Tỷ số '+esc(f.key)+'" data-score="'+esc(f.key)+'" value="'+esc(r.score||'')+'" placeholder="Nhập tỷ số"><select aria-label="Trạng thái '+esc(f.key)+'" data-status="'+esc(f.key)+'"><option value="pending" '+((r.status||'pending')==='pending'?'selected':'')+'>Chưa cập nhật</option><option value="live" '+(r.status==='live'?'selected':'')+'>Đang thi đấu</option><option value="finished" '+(r.status==='finished'?'selected':'')+'>Kết thúc</option></select><button class="save" data-save="'+esc(f.key)+'">Lưu</button>'+(canEdit?'<div class="team-edit"><label>Đội thi đấu thực tế · dùng cho trận TK/BK/CK hoặc trận chưa biết đội</label><input data-teams="'+esc(f.key)+'" value="'+esc(override)+'" placeholder="Ví dụ: Thái Nguyên – Tuyên Quang"><div class="provisional">Nếu chưa xác định, để trống để dùng tên theo lịch gốc.</div></div>':'')+'</div>'}).join('')||'<p>Không có trận phù hợp.</p>';document.querySelectorAll('[data-save]').forEach(b=>b.addEventListener('click',()=>save(b.dataset.save)))}
 async function load(){try{const r=await fetch('../api/results.php?ts='+Date.now(),{cache:'no-store'}),j=await r.json();if(j.ok)saved=j.results||{}}catch(e){}render()}
 async function save(key){const f=allFixtures().find(x=>x.key===key);if(!f)return;const btn=document.querySelector('[data-save="'+key+'"]');btn.disabled=true;const score=document.querySelector('[data-score="'+key+'"]').value.trim();const status=document.querySelector('[data-status="'+key+'"]').value;const teamEl=document.querySelector('[data-teams="'+key+'"]');const teams_override=teamEl?teamEl.value.trim():(saved[key]?.teams_override||'');const payload={fixture_key:key,sport:f.sport,score,status,teams_override};try{const r=await fetch('../api/save-result.php?ts='+Date.now(),{method:'POST',headers:{'Content-Type':'application/json'},cache:'no-store',body:JSON.stringify(payload)}),j=await r.json();if(!r.ok||!j.ok)throw new Error(j.message||'Lỗi lưu');const msg=document.getElementById('message');msg.textContent=j.message+' ('+key+')';msg.style.display='block';await load()}catch(e){const msg=document.getElementById('message');msg.textContent='Không lưu được: '+e.message;msg.style.display='block'}finally{btn.disabled=false}}
