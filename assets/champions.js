@@ -83,8 +83,8 @@
     if(!el){el=document.createElement('section');el.id='champions-section';const anchor=document.querySelector('.content-section');if(anchor&&anchor.parentNode)anchor.parentNode.insertBefore(el,anchor);else document.querySelector('main')?.appendChild(el);}
     el.innerHTML='<div class="champions-head"><p class="section-kicker"><span class="kicker-icon">🏆</span> VINH DANH THÀNH TÍCH</p><h2>Vinh danh thành tích Hội thao</h2><p>Ba môn thi đấu · hiển thị giải nhất, giải nhì và giải ba theo kết quả đã cập nhật</p></div>'+
       '<div class="champion-grid">'+
-      '<article class="champion-card football"><div class="champion-card-head"><span>⚽</span><div><small>BÓNG ĐÁ MINI NAM</small><h3>Podium thành tích</h3></div></div>'+footballCard()+'</article>'+ 
-      '<article class="champion-card volley"><div class="champion-card-head"><span>🏐</span><div><small>BÓNG CHUYỀN HƠI NỮ</small><h3>Podium thành tích</h3></div></div>'+volleyCard()+'</article>'+ 
+      '<article class="champion-card football"><div class="champion-card-head"><span>⚽</span><div><small>BÓNG ĐÁ MINI NAM</small><h3>Thành tích</h3></div></div>'+footballCard()+'</article>'+ 
+      '<article class="champion-card volley"><div class="champion-card-head"><span>🏐</span><div><small>BÓNG CHUYỀN HƠI NỮ</small><h3>Thành tích</h3></div></div>'+volleyCard()+'</article>'+ 
       '<article class="champion-card pickle"><div class="champion-card-head"><span>🏓</span><div><small>PICKLEBALL</small><h3>6 nội dung vô địch</h3></div></div>'+pickleCard()+'</article></div>'+ 
       '<div class="ranking-board"><div class="ranking-board-head"><span>🏅</span><div><small>THÀNH TÍCH TOÀN ĐOÀN</small><h3>Bảng tổng hợp điểm chính thức</h3></div></div>'+rankingCard()+'</div>';
   }
