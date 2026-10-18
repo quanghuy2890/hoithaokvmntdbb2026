@@ -18,4 +18,10 @@
       '1'
     ]);
   }
+
+  // Load the homepage champion showcase without requiring another HTML edit.
+  const script = document.createElement('script');
+  script.src = 'assets/champions.js?v=champions-2';
+  script.defer = true;
+  document.head.appendChild(script);
 })();
